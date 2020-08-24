@@ -10,7 +10,7 @@ const { makeUsersArray } = require('./users.fixtures')
     before('make knex instance', () => {
         db = knex({
             client: 'pg',
-            connection: process.env.TEST_DB_URL,
+            connection: process.env.TEST_DATABASE_URL,
         })
         app.set('db', db)
     })
@@ -161,7 +161,7 @@ describe('DELETE /api/users/:user_id', () => {
     })
 })
 
-describe.only('PATCH /api/users/:user_id', () => {
+describe('PATCH /api/users/:user_id', () => {
     context('Given no users', () => {
         it('resonds with 404', () => {
             const user_id = 123456
