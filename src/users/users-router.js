@@ -100,24 +100,33 @@ usersRouter
             .catch(next)
     })
 
-// usersRouter
-//     .route('/searchByUsername/:username')
-//     .get((req,res,next) => {
-//         UsersService.getByUsername(
-//             req.app.get('db'),
-//             req.params.username
-//         )
-//             .then(user => {
-//                 if(!user) {
-//                     return res.status(404).json({
-//                         error: { message: `User doesn't exist` }
-//                     })
-//                 }
-//                 res.user = user
-//                 next()
-//             })
-//             .catch(next)
-//     })
+usersRouter
+    .route('/searchByUsername/:username')
+    .all((req,res,next) => {
+        UsersService.getByUsername(
+            req.app.get('db'),
+            req.params.username
+        )
+            .then(user => {
+                if(!user) {
+                    return res.status(404).json({
+                        error: { message: `User doesn't exist` }
+                    })
+                }
+                res.user = user
+                next()
+            })
+            .catch(next)
+    })
+    .get((req,res,next) => {
+        res.json({
+            user_id: res.user.user_id,
+            password: res.user.password,
+            display_name: res.user.display_name,
+            date_created: res.user.date_created,
+            username: res.user.username
+        })
+    })
 
 
 module.exports = usersRouter

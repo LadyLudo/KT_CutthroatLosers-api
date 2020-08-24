@@ -239,3 +239,34 @@ describe('PATCH /api/users/:user_id', () => {
         })
     })
 })
+
+describe('GET /api/users/searchByUsername/:username', () => {
+    context('Given no users', () => {
+        it('responds with 404', () => {
+            const username = 'stephen@gmail.com'
+            return supertest(app)
+                .get(`/api/users/searchByUsername/${username}`)
+                .expect(404, { error: { message: `User doesn't exist` } })
+        })
+    })
+
+    context('Given there are users in the database', () => {
+        const testUsers = makeUsersArray()
+        
+        beforeEach('insert users', () => {
+            return db  
+                .into('users')
+                .insert(testUsers)
+        })
+
+        it('Responds with 200 and the expected user', () => {
+            const username = 'john@gmail.com'
+            const user_id = 1
+            const expectedUser = testUsers[user_id -1]
+            return supertest(app)
+                .get(`/api/users/searchByUsername/${username}`)
+                .expect(200, expectedUser)
+        })
+        
+    })
+})
