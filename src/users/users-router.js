@@ -100,4 +100,24 @@ usersRouter
             .catch(next)
     })
 
+// usersRouter
+//     .route('/searchByUsername/:username')
+//     .get((req,res,next) => {
+//         UsersService.getByUsername(
+//             req.app.get('db'),
+//             req.params.username
+//         )
+//             .then(user => {
+//                 if(!user) {
+//                     return res.status(404).json({
+//                         error: { message: `User doesn't exist` }
+//                     })
+//                 }
+//                 res.user = user
+//                 next()
+//             })
+//             .catch(next)
+//     })
+
+
 module.exports = usersRouter

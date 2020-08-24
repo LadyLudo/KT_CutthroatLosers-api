@@ -1,6 +1,9 @@
 const UsersService = {
     getAllUsers(knex) {
-      return knex.select('*').from('users')
+      return knex
+        .select('*')
+        .from('users')
+        .orderBy('user_id')
     },
   
     insertUser(knex, newUser) {
@@ -18,6 +21,14 @@ const UsersService = {
         .from('users')
         .select('*')
         .where('user_id', user_id)
+        .first()
+    },
+
+    getByUsername(knex, username) {
+      return knex
+        .from('users')
+        .select('*')
+        .where('username', username)
         .first()
     },
   
