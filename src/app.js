@@ -4,7 +4,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
-const UsersService = require("./users-service")
+const usersRouter = require('./users/users-router')
 
 const app = express()
 
@@ -26,23 +26,7 @@ app.use(function errorHandler(error, req, res, next) {
        res.status(500).json(response)
      })
 
-app.get('/users', (req, res, next) => {
-  const knexInstance = req.app.get('db')
-  UsersService.getAllUsers(knexInstance)
-    .then(users => {
-      res.json(users)
-    })
-    .catch(next)
-})
-
-app.get('/users/:user_id', (req, res, next) => {
-  const knexInstance = req.app.get('db')
-  UsersService.getById(knexInstance, req.params.user_id)
-    .then(user => {
-      res.json(user)
-    })
-    .catch(next)
-})
+app.use('/api/users', usersRouter)
 
 app.get('/', (req,res) => {
     res.send('Hello, world!')
