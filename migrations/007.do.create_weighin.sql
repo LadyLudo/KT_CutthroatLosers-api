@@ -3,5 +3,7 @@ CREATE TABLE weighin (
     user_id INTEGER NOT NULL,
     contest_id INTEGER NOT NULL,
     weight TEXT NOT NULL,
-    date_created TIMESTAMPTZ DEFAULT now() NOT NULL
+    date_created TIMESTAMPTZ DEFAULT now() NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (contest_id) REFERENCES contests(contest_id)
 );
