@@ -7,6 +7,6 @@ CREATE TABLE points (
     description TEXT,
     win_id INTEGER,
     date_created TIMESTAMPTZ DEFAULT now() NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (contest_id) REFERENCES contests(contest_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (contest_id) REFERENCES contests(contest_id)ON DELETE CASCADE
 );

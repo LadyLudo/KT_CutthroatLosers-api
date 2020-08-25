@@ -3,5 +3,5 @@ CREATE TABLE win (
     win TEXT NOT NULL,
     contest_id INTEGER NOT NULL,
     date_created TIMESTAMPTZ DEFAULT now() NOT NULL,
-    FOREIGN KEY (contest_id) REFERENCES contests(contest_id)
+    FOREIGN KEY (contest_id) REFERENCES contests(contest_id) ON DELETE CASCADE
 );

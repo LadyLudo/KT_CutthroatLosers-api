@@ -4,6 +4,6 @@ CREATE TABLE current_stats (
     goal_weight NUMERIC NOT NULL,
     display_name TEXT NOT NULL,
     contest_id INTEGER,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (contest_id) REFERENCES contests(contest_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (contest_id) REFERENCES contests(contest_id) ON DELETE CASCADE
     );
