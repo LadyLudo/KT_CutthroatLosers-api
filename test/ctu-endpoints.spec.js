@@ -309,3 +309,45 @@ describe('PATCH /api/contesttouser/userId/:user_id', () => {
         })
     })
 })
+
+describe('GET /api/contesttouser/contestId/:contest_id', () => {
+    context('Given no contestUsers', () => {
+        it('responds with 404', () => {
+            const contest_id = 123456
+            return supertest(app)
+                .get(`/api/contesttouser/contestId/${contest_id}`)
+                .expect(404, { error: { message: `ContestUser doesn't exist` } })
+        })
+    })
+
+    context('Given there are contestUsers in the database', () => {
+        const testContestUsers = makeContestUsersArray()
+        const testUsers = makeUsersArray()
+        const testContests = makeContestsArray()
+
+        beforeEach('insert users', () => {
+            return db
+                .into('users')
+                .insert(testUsers)
+        })
+        beforeEach('insert contests', () => {
+            return db
+                .into('contests')
+                .insert(testContests)
+        })
+        beforeEach('insert contest-users', () => {
+            return db
+                .into('contest_to_user')
+                .insert(testContestUsers)
+        })
+
+        it('Responds with 200 and the expected contestUser', () => {
+            const contest_id = 1
+            const expectedContestUser = testContestUsers[contest_id -1]
+            return supertest(app)
+                .get(`/api/contesttouser/contestId/${contest_id}`)
+                .expect(200, expectedContestUser)
+        })
+        
+    })
+})
