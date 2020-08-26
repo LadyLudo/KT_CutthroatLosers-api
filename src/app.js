@@ -7,6 +7,7 @@ const { NODE_ENV } = require('./config')
 const usersRouter = require('./users/users-router')
 const contestsRouter = require('./contests/contests-router')
 const contestUserRouter = require('./contest_to_user/ContestUser-router')
+const CurrentStatsRouter = require('./current_stats/current_stats-router')
 
 const app = express()
 
@@ -31,6 +32,7 @@ app.use(function errorHandler(error, req, res, next) {
 app.use('/api/users', usersRouter)
 app.use('/api/contests', contestsRouter)
 app.use('/api/contesttouser', contestUserRouter)
+app.use('/api/currentstats', CurrentStatsRouter)
 
 app.get('/', (req,res) => {
     res.send('Hello, world!')

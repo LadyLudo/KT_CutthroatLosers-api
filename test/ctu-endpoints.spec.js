@@ -275,37 +275,13 @@ describe('PATCH /api/contesttouser/userId/:user_id', () => {
         it('Responds with 400 when no required fields supplied', () => {
             const idToUpdate = 2
             return supertest(app)
-                .patch(`/api/users/${idToUpdate}`)
+                .patch(`/api/contesttouser/userId/${idToUpdate}`)
                 .send({ irrelevantField: 'foo' })
                 .expect(400, {
                     error: {
-                        message: `Request body must contain either 'password', 'display_name', or 'username'`
+                        message: `Request body must contain either 'user_id' or 'contest_id'`
                     }
                 })
-        })
-
-        it('Responds with 204 when updating only a subset of fields', () => {
-            const idToUpdate = 2
-            const updatedUser = {
-                password: 'updatedtest123',
-            }
-            const expectedUser = {
-                ...testUsers[idToUpdate -1],
-                ...updatedUser
-            }
-
-            return supertest(app)
-                .patch(`/api/users/${idToUpdate}`)
-                .send({
-                    ...updatedUser,
-                    fieldToIgnore: 'should not be in GET response'
-                })
-                .expect(204)
-                .then(res => 
-                    supertest(app)
-                        .get(`/api/users/${idToUpdate}`)
-                        .expect(expectedUser)
-                )
         })
     })
 })
