@@ -20,8 +20,7 @@ const PointsService = {
       return knex
         .from('points')
         .select('*')
-        .where('user_id', user_id)
-        .first()
+        .where('user_id', user_id)   
     },
 
     getByContestId(knex, contest_id) {
@@ -29,7 +28,6 @@ const PointsService = {
           .from('points')
           .select('*')
           .where('contest_id', contest_id)
-          .first()
       },
 
     getById(knex, id) {
