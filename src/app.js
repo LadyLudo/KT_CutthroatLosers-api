@@ -11,6 +11,7 @@ const CurrentStatsRouter = require('./current_stats/current_stats-router')
 const MeasurementsRouter = require('./measurements/measurements-router')
 const PointsRouter = require('./points/points-router')
 const WinRouter = require('./win/win-router')
+const WeighinRouter = require('./Weighin/weighin-router')
 
 const app = express()
 
@@ -39,6 +40,7 @@ app.use('/api/currentstats', CurrentStatsRouter)
 app.use('/api/measurements', MeasurementsRouter)
 app.use('/api/points', PointsRouter)
 app.use('/api/wins', WinRouter)
+app.use('/api/weighins', WeighinRouter)
 
 app.get('/', (req,res) => {
     res.send('Hello, world!')
