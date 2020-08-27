@@ -10,6 +10,7 @@ const contestUserRouter = require('./contest_to_user/ContestUser-router')
 const CurrentStatsRouter = require('./current_stats/current_stats-router')
 const MeasurementsRouter = require('./measurements/measurements-router')
 const PointsRouter = require('./points/points-router')
+const WinRouter = require('./win/win-router')
 
 const app = express()
 
@@ -37,6 +38,7 @@ app.use('/api/contesttouser', contestUserRouter)
 app.use('/api/currentstats', CurrentStatsRouter)
 app.use('/api/measurements', MeasurementsRouter)
 app.use('/api/points', PointsRouter)
+app.use('/api/wins', WinRouter)
 
 app.get('/', (req,res) => {
     res.send('Hello, world!')
