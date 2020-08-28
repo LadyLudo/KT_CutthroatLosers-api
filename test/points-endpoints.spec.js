@@ -24,6 +24,20 @@ before('clean the table', () => {
     db('points').delete()
 })
 
+let authToken;
+
+beforeEach('register and login', () => {
+    return true;
+    /*supertest.post('/api/users',{body:{username:testUsers[0].username, password:testUsers[0].password}})
+        .then(res=>{
+            supertest.post('/api/auth/login',{body:{username:testUsers[0].username, password:testUsers[0].password}})
+            .then(res2=>res2.json())
+            .then(resJson=>{
+                authToken = resJson.body.authToken;
+            })
+        })*/
+})
+
 afterEach('cleanup', () => {
     db('users').delete()
     db('contests').delete()
@@ -35,6 +49,7 @@ describe('GET /api/points', function() {
         it('responds with 200 and an empty list', () => {
             return supertest(app)
                 .get('/api/points')
+                //.set('headers',{Authorization:`Bearer ${authToken}`})
                 .expect(200, [])
         })
     })
