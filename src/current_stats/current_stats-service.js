@@ -43,6 +43,13 @@ const CurrentStatsService = {
           .select('*')
           .where({user_id, contest_id})
       },
+
+    getDisplayName(knex, user_id, contest_id) {
+        return knex
+          .from('current_stats')
+          .select('display_name')
+          .where({user_id, contest_id})
+      },
   
     deleteCurrentStats(knex, user_id, contest_id) {
       return knex('current_stats')

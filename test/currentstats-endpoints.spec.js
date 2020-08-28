@@ -407,3 +407,95 @@ describe('PATCH /api/currentstats/userId/:user_id', () => {
         })
     })
 })
+
+describe('GET /api/currentstats/contestUserId', () => {
+    context('Given no currentstats', () => {
+        it('responds with 404', () => {
+            const contest_id = 123456
+            const user_id = 1234
+            return supertest(app)
+                .get(`/api/currentstats/contestUserId`)
+                .query({user_id: user_id, contest_id: contest_id})
+                .expect(404, { error: { message: `CurrentStats doesn't exist` } })
+        })
+    })
+
+    context('Given there are currentstats in the database', () => {
+        const testCurrentStats = makeCurrentStatsArray()
+        const testUsers = makeUsersArray()
+        const testContests = makeContestsArray()
+
+        beforeEach('insert users', () => {
+            return db
+                .into('users')
+                .insert(testUsers)
+        })
+        beforeEach('insert contests', () => {
+            return db
+                .into('contests')
+                .insert(testContests)
+        })
+        beforeEach('insert currentstats', () => {
+            return db
+                .into('current_stats')
+                .insert(testCurrentStats)
+        })
+
+        it('Responds with 200 and the expected contest', () => {
+            const contest_id = 1
+            const user_id = 1
+            const expectedCurrentStats = testCurrentStats.filter(currentstats => currentstats.contest_id === contest_id && currentstats.user_id === user_id)
+            return supertest(app)
+                .get(`/api/currentstats/contestUserId`)
+                .query({user_id: user_id, contest_id: contest_id})
+                .expect(200, expectedCurrentStats)
+        })
+        
+    })
+})
+
+describe.only('GET /api/currentstats/contestUserId/displayname', () => {
+    context('Given no currentstats', () => {
+        it('responds with 404', () => {
+            const contest_id = 123456
+            const user_id = 1234
+            return supertest(app)
+                .get(`/api/currentstats/contestUserId/displayname`)
+                .query({user_id: user_id, contest_id: contest_id})
+                .expect(404, { error: { message: `CurrentStats doesn't exist` } })
+        })
+    })
+
+    context('Given there are currentstats in the database', () => {
+        const testCurrentStats = makeCurrentStatsArray()
+        const testUsers = makeUsersArray()
+        const testContests = makeContestsArray()
+
+        beforeEach('insert users', () => {
+            return db
+                .into('users')
+                .insert(testUsers)
+        })
+        beforeEach('insert contests', () => {
+            return db
+                .into('contests')
+                .insert(testContests)
+        })
+        beforeEach('insert currentstats', () => {
+            return db
+                .into('current_stats')
+                .insert(testCurrentStats)
+        })
+
+        it('Responds with 200 and the expected contest', () => {
+            const contest_id = 1
+            const user_id = 1
+            const expectedCurrentStats = testCurrentStats.filter(currentstats => currentstats.contest_id === contest_id && currentstats.user_id === user_id)
+            return supertest(app)
+                .get(`/api/currentstats/contestUserId/displayname`)
+                .query({user_id: user_id, contest_id: contest_id})
+                .expect(200, `"${expectedCurrentStats[0].display_name}"`)
+        })
+        
+    })
+})

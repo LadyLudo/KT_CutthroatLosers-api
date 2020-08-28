@@ -135,5 +135,54 @@ CurrentStatsRouter
         })
 
         
+CurrentStatsRouter
+        .route('/contestUserId')
+        .all((req,res,next) => {
+            CurrentStatsService.getByContestUserId(
+                req.app.get('db'),
+                req.query.contest_id,
+                req.query.user_id
+            )
+                .then(currentstats => {
+                    if(currentstats.length === 0) {
+                        return res.status(404).json({
+                            error: { message: `CurrentStats doesn't exist` }
+                        })
+                    }
+                    res.currentstats = currentstats
+                    next()
+        
+                })
+                .catch(next)
+        })
+        .get((req, res, next) => {
+            res.json( res.currentstats )
+        })
+
+CurrentStatsRouter
+        .route('/contestUserId/displayname')
+        .all((req,res,next) => {
+            CurrentStatsService.getDisplayName(
+                req.app.get('db'),
+                req.query.contest_id,
+                req.query.user_id
+            )
+                .then(currentstats => {
+                    if(currentstats.length === 0) {
+                        return res.status(404).json({
+                            error: { message: `CurrentStats doesn't exist` }
+                        })
+                    }
+                    res.currentstats = currentstats
+                    next()
+        
+                })
+                .catch(next)
+        })
+        .get((req, res, next) => {
+            res.json( res.currentstats[0].display_name )
+        })
+
+      
 
 module.exports = CurrentStatsRouter

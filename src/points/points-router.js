@@ -39,6 +39,15 @@ PointsRouter
           .catch(next)
     })
 
+/*
+
+PointsRouter.route('/userId')
+    .all(requireAuth, (req,res,next)=>{
+        req.user.id
+    })
+
+*/
+
 PointsRouter
     .route('/userId/:user_id')
     .all((req,res,next) => {
