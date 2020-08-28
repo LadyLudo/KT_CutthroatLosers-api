@@ -103,7 +103,7 @@ describe('GET /api/measurements/userId/:user_id', () => {
 
         it('Responds with 200 and the expected measurement', () => {
             const user_id = 2
-            const expectedMeasurement = testMeasurements[user_id -1]
+            const expectedMeasurement = testMeasurements.filter(measurement => measurement.user_id === user_id)
             return supertest(app)
                 .get(`/api/measurements/userId/${user_id}`)
                 .expect(200, expectedMeasurement)
@@ -145,7 +145,7 @@ describe('GET /api/measurements/contestId/:contest_id', () => {
 
         it('Responds with 200 and the expected measurement', () => {
             const contest_id = 1
-            const expectedMeasurement = testMeasurements[contest_id -1]
+            const expectedMeasurement = testMeasurements.filter(measurement => measurement.contest_id === contest_id)
             return supertest(app)
                 .get(`/api/measurements/contestId/${contest_id}`)
                 .expect(200, expectedMeasurement)
@@ -188,7 +188,7 @@ describe('POST /api/measurements/', () => {
                 .then(postRes => 
                     supertest(app)
                         .get(`/api/measurements/userId/${postRes.body.user_id}`)
-                        .expect(postRes.body)
+                        .expect([postRes.body])
                     )
         })
     })

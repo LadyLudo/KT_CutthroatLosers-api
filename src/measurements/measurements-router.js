@@ -47,7 +47,7 @@ MeasurementsRouter
             req.params.user_id
         )
             .then(measurements => {
-                if(!measurements) {
+                if(measurements.length === 0) {
                     return res.status(404).json({
                         error: { message: `Measurements do not exist` }
                     })
@@ -59,14 +59,7 @@ MeasurementsRouter
             .catch(next)
     })
     .get((req, res, next) => {
-        res.json({
-            id: res.measurements.id,
-            user_id: res.measurements.user_id,
-            contest_id: res.measurements.contest_id,
-            measurement: res.measurements.measurement,
-            date_created: res.measurements.date_created
-            
-        })
+        res.json(res.measurements)
     })
 
 MeasurementsRouter
@@ -77,7 +70,7 @@ MeasurementsRouter
             req.params.contest_id
         )
             .then(measurements => {
-                if(!measurements) {
+                if(measurements.length === 0) {
                     return res.status(404).json({
                         error: { message: `Measurements do not exist` }
                     })
@@ -89,14 +82,7 @@ MeasurementsRouter
             .catch(next)
     })
     .get((req, res, next) => {
-        res.json({
-            id: res.measurements.id,
-            user_id: res.measurements.user_id,
-            contest_id: res.measurements.contest_id,
-            measurement: res.measurements.measurement,
-            date_created: res.measurements.date_created
-            
-        })
+        res.json(res.measurements)
     })
 
 MeasurementsRouter

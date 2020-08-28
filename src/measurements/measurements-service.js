@@ -21,7 +21,6 @@ const MeasurementsService = {
         .from('measurements')
         .select('*')
         .where('user_id', user_id)
-        .first()
     },
 
     getByContestId(knex, contest_id) {
@@ -29,7 +28,6 @@ const MeasurementsService = {
           .from('measurements')
           .select('*')
           .where('contest_id', contest_id)
-          .first()
       },
 
     getById(knex, id) {
