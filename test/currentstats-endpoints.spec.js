@@ -143,7 +143,7 @@ describe('GET /api/currentstats/userId/:user_id', () => {
 
         it('Responds with 200 and the expected user', () => {
             const user_id = 2
-            const expectedCurrentStats = testCurrentStats[user_id -1]
+            const expectedCurrentStats = testCurrentStats.filter(currentStats => currentStats.user_id === user_id)
             return supertest(app)
                 .get(`/api/currentstats/userId/${user_id}`)
                 .expect(200, expectedCurrentStats)
@@ -185,7 +185,7 @@ describe('GET /api/currentstats/contestId/:contest_id', () => {
 
         it('Responds with 200 and the expected contest', () => {
             const contest_id = 1
-            const expectedCurrentStats = testCurrentStats[contest_id -1]
+            const expectedCurrentStats = testCurrentStats.filter(currentstats => currentstats.contest_id === contest_id)
             return supertest(app)
                 .get(`/api/currentstats/contestId/${contest_id}`)
                 .expect(200, expectedCurrentStats)
@@ -232,7 +232,7 @@ describe('POST /api/currentstats/', () => {
                 .then(postRes => 
                     supertest(app)
                         .get(`/api/currentstats/userId/${postRes.body.user_id}`)
-                        .expect(postRes.body)
+                        .expect([postRes.body])
                     )
         })
     })
@@ -362,7 +362,7 @@ describe('PATCH /api/currentstats/userId/:user_id', () => {
                 .then(res => 
                     supertest(app)
                         .get(`/api/currentstats/userId/${userIdToUpdate}`)
-                        .expect(expectedCurrentStats)
+                        .expect([expectedCurrentStats])
                 )
         })
 
@@ -402,7 +402,7 @@ describe('PATCH /api/currentstats/userId/:user_id', () => {
                 .then(res => 
                     supertest(app)
                         .get(`/api/currentstats/userId/${idToUpdate}`)
-                        .expect(expectedCurrentStats)
+                        .expect([expectedCurrentStats])
                 )
         })
     })

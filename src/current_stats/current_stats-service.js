@@ -28,7 +28,6 @@ const CurrentStatsService = {
         .from('current_stats')
         .select('*')
         .where('user_id', user_id)
-        .first()
     },
 
     getByContestId(knex, contest_id) {
@@ -36,16 +35,22 @@ const CurrentStatsService = {
           .from('current_stats')
           .select('*')
           .where('contest_id', contest_id)
-          .first()
+      },
+
+    getByContestUserId(knex, user_id, contest_id) {
+        return knex
+          .from('current_stats')
+          .select('*')
+          .where({user_id, contest_id})
       },
   
-    deleteUser(knex, user_id) {
+    deleteCurrentStats(knex, user_id, contest_id) {
       return knex('current_stats')
         .where({ user_id })
         .delete()
     },
   
-    updateUser(knex, user_id, newCurrentStatsFields) {
+    updateCurrentStats(knex, user_id, contest_id, newCurrentStatsFields) {
       return knex('current_stats')
         .where({ user_id })
         .update(newCurrentStatsFields)

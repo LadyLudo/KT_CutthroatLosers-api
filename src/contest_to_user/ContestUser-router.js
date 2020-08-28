@@ -47,6 +47,54 @@ contestUserRouter
             req.params.user_id
         )
             .then(contestUser => {
+                if(contestUser.length === 0) {
+                    return res.status(404).json({
+                        error: { message: `ContestUser doesn't exist` }
+                    })
+                }
+                res.contestUser = contestUser
+                next()
+    
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json( res.contestUser )
+    })
+    
+
+
+contestUserRouter
+    .route('/contestId/:contest_id')
+    .all((req,res,next) => {
+        ContestUserService.getByContestId(
+            req.app.get('db'),
+            req.params.contest_id
+        )
+            .then(contestUser => {
+                if(contestUser.length === 0) {
+                    return res.status(404).json({
+                        error: { message: `ContestUser doesn't exist` }
+                    })
+                }
+                res.contestUser = contestUser
+                next()
+    
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json( res.contestUser )
+    })
+
+contestUserRouter
+    .route('/id/:id')
+    .all((req,res,next) => {
+        ContestUserService.getById(
+            req.app.get('db'),
+            req.params.id
+        )
+            .then(contestUser => {
                 if(!contestUser) {
                     return res.status(404).json({
                         error: { message: `ContestUser doesn't exist` }
@@ -59,17 +107,12 @@ contestUserRouter
             .catch(next)
     })
     .get((req, res, next) => {
-        res.json({
-            id: res.contestUser.id,
-            user_id: res.contestUser.user_id,
-            contest_id: res.contestUser.contest_id,
-            date_created: res.contestUser.date_created
-        })
+        res.json( res.contestUser )
     })
     .delete((req,res,next) => {
         ContestUserService.deleteContestUser(
             req.app.get('db'),
-            req.params.user_id
+            req.params.id
         )
             .then(() => {
                 res.status(204).end()
@@ -91,7 +134,7 @@ contestUserRouter
 
         ContestUserService.updateContestUser(
             req.app.get('db'),
-            req.params.user_id,
+            req.params.id,
             contestUserToUpdate
         )
             .then(numRowsAffected => {
@@ -100,33 +143,5 @@ contestUserRouter
             .catch(next)
     })
 
-
-contestUserRouter
-    .route('/contestId/:contest_id')
-    .all((req,res,next) => {
-        ContestUserService.getByContestId(
-            req.app.get('db'),
-            req.params.contest_id
-        )
-            .then(contestUser => {
-                if(!contestUser) {
-                    return res.status(404).json({
-                        error: { message: `ContestUser doesn't exist` }
-                    })
-                }
-                res.contestUser = contestUser
-                next()
-    
-            })
-            .catch(next)
-    })
-    .get((req, res, next) => {
-        res.json({
-            id: res.contestUser.id,
-            user_id: res.contestUser.user_id,
-            contest_id: res.contestUser.contest_id,
-            date_created: res.contestUser.date_created
-        })
-    })
 
 module.exports = contestUserRouter

@@ -60,7 +60,7 @@ CurrentStatsRouter
                 req.params.user_id
             )
                 .then(currentstats => {
-                    if(!currentstats) {
+                    if(currentstats.length === 0) {
                         return res.status(404).json({
                             error: { message: `CurrentStats doesn't exist` }
                         })
@@ -72,18 +72,13 @@ CurrentStatsRouter
                 .catch(next)
         })
         .get((req, res, next) => {
-            res.json({
-                user_id: res.currentstats.user_id,
-                current_weight: res.currentstats.current_weight,
-                goal_weight: res.currentstats.goal_weight,
-                display_name: res.currentstats.display_name,
-                contest_id: res.currentstats.contest_id
-            })
+            res.json( res.currentstats )
         })
         .delete((req,res,next) => {
-            CurrentStatsService.deleteUser(
+            CurrentStatsService.deleteCurrentStats(
                 req.app.get('db'),
-                req.params.user_id
+                req.params.user_id,
+                req.params.contest_id
             )
                 .then(() => {
                     res.status(204).end()
@@ -92,9 +87,9 @@ CurrentStatsRouter
         })
         .patch( jsonParser, (req,res, next) => {
             const { user_id, current_weight, goal_weight, display_name, contest_id } = req.body
-            const userToUpdate = { user_id, current_weight, goal_weight, display_name, contest_id }
+            const currentStatsToUpdate = { user_id, current_weight, goal_weight, display_name, contest_id }
     
-            const numberOfValues = Object.values(userToUpdate).filter(Boolean).length
+            const numberOfValues = Object.values(currentStatsToUpdate).filter(Boolean).length
             if (numberOfValues === 0) {
                 return res.status(400).json({
                     error: {
@@ -103,16 +98,18 @@ CurrentStatsRouter
                 })
             }
     
-            CurrentStatsService.updateUser(
+            CurrentStatsService.updateCurrentStats(
                 req.app.get('db'),
                 req.params.user_id,
-                userToUpdate
+                req.params.contest_id,
+                currentStatsToUpdate
             )
                 .then(numRowsAffected => {
                     res.status(204).end()
                 })
                 .catch(next)
         })
+        
 
 CurrentStatsRouter
         .route('/contestId/:contest_id')
@@ -122,7 +119,7 @@ CurrentStatsRouter
                 req.params.contest_id
             )
                 .then(currentstats => {
-                    if(!currentstats) {
+                    if(currentstats.length === 0) {
                         return res.status(404).json({
                             error: { message: `CurrentStats doesn't exist` }
                         })
@@ -134,13 +131,9 @@ CurrentStatsRouter
                 .catch(next)
         })
         .get((req, res, next) => {
-            res.json({
-                user_id: res.currentstats.user_id,
-                current_weight: res.currentstats.current_weight,
-                goal_weight: res.currentstats.goal_weight,
-                display_name: res.currentstats.display_name,
-                contest_id: res.currentstats.contest_id
-            })
+            res.json( res.currentstats )
         })
+
+        
 
 module.exports = CurrentStatsRouter

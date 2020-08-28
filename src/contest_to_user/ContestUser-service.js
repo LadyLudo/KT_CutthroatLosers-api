@@ -21,7 +21,6 @@ const ContestUserService = {
         .from('contest_to_user')
         .select('*')
         .where('user_id', user_id)
-        .first()
     },
 
     getByContestId(knex, contest_id) {
@@ -29,8 +28,15 @@ const ContestUserService = {
           .from('contest_to_user')
           .select('*')
           .where('contest_id', contest_id)
-          .first()
     },
+
+    getById(knex, id) {
+      return knex
+        .from('contest_to_user')
+        .select('*')
+        .where('id', id)
+        .first()
+  },
   
     deleteContestUser(knex, user_id) {
       return knex('contest_to_user')

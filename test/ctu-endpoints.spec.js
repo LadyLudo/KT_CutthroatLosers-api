@@ -106,7 +106,7 @@ describe('GET /api/contesttouser/userId/:user_id', () => {
             const expectedContestUser = testContestUsers[user_id -1]
             return supertest(app)
                 .get(`/api/contesttouser/userId/${user_id}`)
-                .expect(200, expectedContestUser)
+                .expect(200, [expectedContestUser])
         })
         
     })
@@ -143,7 +143,7 @@ describe('POST /api/contesttouser/', () => {
                 })
                 .then(postRes => 
                     supertest(app)
-                        .get(`/api/contesttouser/userId/${postRes.body.user_id}`)
+                        .get(`/api/contesttouser/id/${postRes.body.id}`)
                         .expect(postRes.body)
                     )
         })
@@ -171,13 +171,13 @@ describe('POST /api/contesttouser/', () => {
     
 })
 
-describe('DELETE /api/contesttouser/userId/:user_id', () => {
+describe('DELETE /api/contesttouser/id/:id', () => {
 
     context('Given no contestUsers', () => {
         it('responds with 404', () => {
-            const user_id = 123456
+            const id = 123456
             return supertest(app)
-                .delete(`/api/contesttouser/userId/${user_id}`)
+                .delete(`/api/contesttouser/id/${id}`)
                 .expect(404, {
                     error: { message: `ContestUser doesn't exist` }
                 })
@@ -206,10 +206,10 @@ describe('DELETE /api/contesttouser/userId/:user_id', () => {
         })
 
         it('responds with 204 and removes the contestUser', () => {
-            const userIdToRemove = 1
-            const expectedContestUsers = testContestUsers.filter(contestUser => contestUser.user_id !== userIdToRemove)
+            const IdToRemove = 1
+            const expectedContestUsers = testContestUsers.filter(contestUser => contestUser.user_id !== IdToRemove)
             return supertest(app)
-                .delete(`/api/contesttouser/userId/${userIdToRemove}`)
+                .delete(`/api/contesttouser/id/${IdToRemove}`)
                 .expect(204)
                 .then(res =>
                     supertest(app)
@@ -220,12 +220,12 @@ describe('DELETE /api/contesttouser/userId/:user_id', () => {
     })
 })
 
-describe('PATCH /api/contesttouser/userId/:user_id', () => {
+describe('PATCH /api/contesttouser/id/:id', () => {
     context('Given no contestUsers', () => {
         it('resonds with 404', () => {
-            const user_id = 123456
+            const id = 123456
             return supertest(app)
-                .patch(`/api/contesttouser/userId/${user_id}`)
+                .patch(`/api/contesttouser/id/${id}`)
                 .expect(404, { error: { message: `ContestUser doesn't exist` } })
         })
     })
@@ -252,22 +252,22 @@ describe('PATCH /api/contesttouser/userId/:user_id', () => {
         })
 
         it('Responds with 204 and updates the article', () => {
-            const userIdToUpdate = 2
+            const IdToUpdate = 2
             const updatedContestUser = {
                 user_id: 2,
                 contest_id: 3
             }
             const expectedContestUser = {
-                ...testContestUsers[userIdToUpdate -1],
+                ...testContestUsers[IdToUpdate -1],
                 ...updatedContestUser
             }
             return supertest(app)
-                .patch(`/api/contesttouser/userId/${userIdToUpdate}`)
+                .patch(`/api/contesttouser/id/${IdToUpdate}`)
                 .send(updatedContestUser)
                 .expect(204)
                 .then(res => 
                     supertest(app)
-                        .get(`/api/contesttouser/userId/${userIdToUpdate}`)
+                        .get(`/api/contesttouser/id/${IdToUpdate}`)
                         .expect(expectedContestUser)
                 )
         })
@@ -275,7 +275,7 @@ describe('PATCH /api/contesttouser/userId/:user_id', () => {
         it('Responds with 400 when no required fields supplied', () => {
             const idToUpdate = 2
             return supertest(app)
-                .patch(`/api/contesttouser/userId/${idToUpdate}`)
+                .patch(`/api/contesttouser/id/${idToUpdate}`)
                 .send({ irrelevantField: 'foo' })
                 .expect(400, {
                     error: {
@@ -319,7 +319,7 @@ describe('GET /api/contesttouser/contestId/:contest_id', () => {
 
         it('Responds with 200 and the expected contestUser', () => {
             const contest_id = 1
-            const expectedContestUser = testContestUsers[contest_id -1]
+            const expectedContestUser = testContestUsers.filter(contest => contest.contest_id === contest_id)
             return supertest(app)
                 .get(`/api/contesttouser/contestId/${contest_id}`)
                 .expect(200, expectedContestUser)
