@@ -148,5 +148,53 @@ MeasurementsRouter
             .catch(next)
     })
 
+MeasurementsRouter
+    .route('/getMeasurementInfo')
+    .all((req,res,next) => {
+        MeasurementsService.getMeasurementInfo(
+            req.app.get('db'),
+            req.query.contest_id,
+            req.query.user_id
+        )
+            .then(measurements => {
+                if(measurements.length === 0) {
+                    return res.status(404).json({
+                        error: { message: `Measurements do not exist` }
+                    })
+                }
+                res.measurements = measurements
+                next()
+    
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json(res.measurements)
+    })
+
+MeasurementsRouter
+    .route('/getAdminMeasurementProgress')
+    .all((req,res,next) => {
+        MeasurementsService.getAdminMeasurementProgress(
+            req.app.get('db'),
+            req.query.user_id
+        )
+            .then(measurements => {
+                if(measurements.length === 0) {
+                    return res.status(404).json({
+                        error: { message: `Measurements do not exist` }
+                    })
+                }
+                res.measurements = measurements
+                next()
+    
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json(res.measurements)
+    })
+
+
 
 module.exports = MeasurementsRouter

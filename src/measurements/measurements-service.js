@@ -37,6 +37,21 @@ const MeasurementsService = {
           .where('id', id)
           .first()
       },
+
+    getMeasurementInfo(knex, contest_id, user_id) {
+      return knex
+        .from('measurements')
+        .select(knex.raw('CAST(date_created AS DATE), CAST (measurement AS DOUBLE PRECISION)'))
+        .where({ contest_id, user_id })
+    },
+
+    getAdminMeasurementProgress(knex, user_id) {
+      return knex
+        .from('measurements')
+        .select('date_created', knex.raw('CAST (measurement AS DOUBLE PRECISION)'))
+        .where({ user_id })
+        .limit(2)
+    },
   
     deleteMeasurement(knex, id) {
       return knex('measurements')

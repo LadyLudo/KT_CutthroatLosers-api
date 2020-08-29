@@ -262,13 +262,15 @@ describe('POST /api/currentstats/', () => {
     
 })
 
-describe('DELETE /api/currentstats/userId/:user_id', () => {
+describe('DELETE /api/currentstats/contestUserId', () => {
 
     context('Given no currentstats', () => {
         it('responds with 404', () => {
             const user_id = 123456
+            const contest_id = 123
             return supertest(app)
-                .delete(`/api/currentstats/userId/${user_id}`)
+                .delete(`/api/currentstats/contestUserId`)
+                .query({ user_id: user_id, contest_id: contest_id})
                 .expect(404, {
                     error: { message: `CurrentStats doesn't exist` }
                 })
@@ -298,9 +300,11 @@ describe('DELETE /api/currentstats/userId/:user_id', () => {
 
         it('responds with 204 and removes the currentstats', () => {
             const userIdToRemove = 1
+            const contestIdToRemove = 1
             const expectedCurrentStats = testCurrentStats.filter(currentstats => currentstats.user_id !== userIdToRemove)
             return supertest(app)
-                .delete(`/api/currentstats/userId/${userIdToRemove}`)
+                .delete(`/api/currentstats/contestUserId`)
+                .query({ user_id: userIdToRemove, contest_id: contestIdToRemove})
                 .expect(204)
                 .then(res =>
                     supertest(app)
@@ -311,12 +315,14 @@ describe('DELETE /api/currentstats/userId/:user_id', () => {
     })
 })
 
-describe('PATCH /api/currentstats/userId/:user_id', () => {
+describe('PATCH /api/currentstats/contestUserId', () => {
     context('Given no currentstats', () => {
         it('resonds with 404', () => {
             const user_id = 123456
+            const contest_id = 123
             return supertest(app)
-                .patch(`/api/currentstats/userId/${user_id}`)
+                .patch(`/api/currentstats/contestUserId`)
+                .query({ user_id: user_id, contest_id: contest_id})
                 .expect(404, { error: { message: `CurrentStats doesn't exist` } })
         })
     })
@@ -343,9 +349,10 @@ describe('PATCH /api/currentstats/userId/:user_id', () => {
         })
 
         it('Responds with 204 and updates the currentstats', () => {
-            const userIdToUpdate = 2
+            const userIdToUpdate = 1
+            const contestIdToUpdate = 1
             const updatedCurrentStats = {
-                user_id: 2,
+                user_id: 1,
                 current_weight: '123',
                 goal_weight: '123',
                 display_name: 'John Test Updated',
@@ -356,20 +363,24 @@ describe('PATCH /api/currentstats/userId/:user_id', () => {
                 ...updatedCurrentStats
             }
             return supertest(app)
-                .patch(`/api/currentstats/userId/${userIdToUpdate}`)
+                .patch(`/api/currentstats/contestUserId`)
+                .query({ user_id: userIdToUpdate, contest_id: contestIdToUpdate})
                 .send(updatedCurrentStats)
                 .expect(204)
                 .then(res => 
                     supertest(app)
-                        .get(`/api/currentstats/userId/${userIdToUpdate}`)
+                        .get(`/api/currentstats/contestUserId`)
+                        .query({ user_id: userIdToUpdate, contest_id: contestIdToUpdate})
                         .expect([expectedCurrentStats])
                 )
         })
 
         it('Responds with 400 when no required fields supplied', () => {
-            const idToUpdate = 2
+            const userIdToUpdate = 1
+            const contestIdToUpdate = 1
             return supertest(app)
-                .patch(`/api/currentstats/userId/${idToUpdate}`)
+                .patch(`/api/currentstats/contestUserId`)
+                .query({ user_id: userIdToUpdate, contest_id: contestIdToUpdate})
                 .send({ irrelevantField: 'foo' })
                 .expect(400, {
                     error: {
@@ -379,21 +390,23 @@ describe('PATCH /api/currentstats/userId/:user_id', () => {
         })
 
         it('Responds with 204 when updating only a subset of fields', () => {
-            const idToUpdate = 2
+            const userIdToUpdate = 1
+            const contestIdToUpdate = 1
             const updatedCurrentStats = {
-                user_id: 2,
+                user_id: 1,
                 current_weight: '124',
                 goal_weight: '124',
                 display_name: 'Johnny Test',
                 contest_id: 1
             }
             const expectedCurrentStats = {
-                ...testCurrentStats[idToUpdate -1],
+                ...testCurrentStats[userIdToUpdate -1],
                 ...updatedCurrentStats
             }
 
             return supertest(app)
-                .patch(`/api/currentstats/userId/${idToUpdate}`)
+                .patch(`/api/currentstats/contestUserId`)
+                .query({ user_id: userIdToUpdate, contest_id: contestIdToUpdate})
                 .send({
                     ...updatedCurrentStats,
                     fieldToIgnore: 'should not be in GET response'
@@ -401,7 +414,8 @@ describe('PATCH /api/currentstats/userId/:user_id', () => {
                 .expect(204)
                 .then(res => 
                     supertest(app)
-                        .get(`/api/currentstats/userId/${idToUpdate}`)
+                        .get(`/api/currentstats/contestUserId`)
+                        .query({ user_id: userIdToUpdate, contest_id: contestIdToUpdate})
                         .expect([expectedCurrentStats])
                 )
         })
@@ -454,7 +468,7 @@ describe('GET /api/currentstats/contestUserId', () => {
     })
 })
 
-describe.only('GET /api/currentstats/contestUserId/displayname', () => {
+describe('GET /api/currentstats/contestUserId/displayname', () => {
     context('Given no currentstats', () => {
         it('responds with 404', () => {
             const contest_id = 123456

@@ -59,7 +59,7 @@ const CurrentStatsService = {
   
     updateCurrentStats(knex, user_id, contest_id, newCurrentStatsFields) {
       return knex('current_stats')
-        .where({ user_id })
+        .where({ user_id, contest_id })
         .update(newCurrentStatsFields)
     },
   }

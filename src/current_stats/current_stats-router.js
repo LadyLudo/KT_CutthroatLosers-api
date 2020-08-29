@@ -74,41 +74,6 @@ CurrentStatsRouter
         .get((req, res, next) => {
             res.json( res.currentstats )
         })
-        .delete((req,res,next) => {
-            CurrentStatsService.deleteCurrentStats(
-                req.app.get('db'),
-                req.params.user_id,
-                req.params.contest_id
-            )
-                .then(() => {
-                    res.status(204).end()
-                })
-                .catch(next)
-        })
-        .patch( jsonParser, (req,res, next) => {
-            const { user_id, current_weight, goal_weight, display_name, contest_id } = req.body
-            const currentStatsToUpdate = { user_id, current_weight, goal_weight, display_name, contest_id }
-    
-            const numberOfValues = Object.values(currentStatsToUpdate).filter(Boolean).length
-            if (numberOfValues === 0) {
-                return res.status(400).json({
-                    error: {
-                        message: `Request body must contain either 'user_id' 'current_weight', 'goal_weight', 'display_name', or 'contest_id'`
-                    }
-                })
-            }
-    
-            CurrentStatsService.updateCurrentStats(
-                req.app.get('db'),
-                req.params.user_id,
-                req.params.contest_id,
-                currentStatsToUpdate
-            )
-                .then(numRowsAffected => {
-                    res.status(204).end()
-                })
-                .catch(next)
-        })
         
 
 CurrentStatsRouter
@@ -157,6 +122,41 @@ CurrentStatsRouter
         })
         .get((req, res, next) => {
             res.json( res.currentstats )
+        })
+        .delete((req,res,next) => {
+            CurrentStatsService.deleteCurrentStats(
+                req.app.get('db'),
+                req.query.user_id,
+                req.query.contest_id
+            )
+                .then(() => {
+                    res.status(204).end()
+                })
+                .catch(next)
+        })
+        .patch( jsonParser, (req,res, next) => {
+            const { user_id, current_weight, goal_weight, display_name, contest_id } = req.body
+            const currentStatsToUpdate = { user_id, current_weight, goal_weight, display_name, contest_id }
+    
+            const numberOfValues = Object.values(currentStatsToUpdate).filter(Boolean).length
+            if (numberOfValues === 0) {
+                return res.status(400).json({
+                    error: {
+                        message: `Request body must contain either 'user_id' 'current_weight', 'goal_weight', 'display_name', or 'contest_id'`
+                    }
+                })
+            }
+    
+            CurrentStatsService.updateCurrentStats(
+                req.app.get('db'),
+                req.query.user_id,
+                req.query.contest_id,
+                currentStatsToUpdate
+            )
+                .then(numRowsAffected => {
+                    res.status(204).end()
+                })
+                .catch(next)
         })
 
 CurrentStatsRouter

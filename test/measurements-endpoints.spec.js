@@ -399,3 +399,91 @@ describe('PATCH /api/measurements/id/:id', () => {
         })
     })
 })
+
+describe('GET /api/measurements/getMeasurementInfo', () => {
+    context('Given no measurements', () => {
+        it('responds with 404', () => {
+            const user_id = 123456
+            const contest_id = 123
+            return supertest(app)
+                .get(`/api/measurements/getMeasurementInfo`)
+                .query({ user_id : user_id, contest_id: contest_id})
+                .expect(404, { error: { message: `Measurements do not exist` } })
+        })
+    })
+
+    context('Given there are measurements in the database', () => {
+        const testMeasurements = makeMeasurementsArray()
+        const testUsers = makeUsersArray()
+        const testContests = makeContestsArray()
+
+        beforeEach('insert users', () => {
+            return db
+                .into('users')
+                .insert(testUsers)
+        })
+        beforeEach('insert contests', () => {
+            return db
+                .into('contests')
+                .insert(testContests)
+        })
+        beforeEach('insert measurements', () => {
+            return db
+                .into('measurements')
+                .insert(testMeasurements)
+        })
+
+        it('Responds with 200 and the expected measurement', () => {
+            const user_id = 2
+            const contest_id = 1
+            return supertest(app)
+                .get(`/api/measurements/getMeasurementInfo`)
+                .query({ user_id : user_id, contest_id: contest_id})
+                .expect(200)
+        })
+        
+    })
+})
+
+describe.only('GET /api/measurements/getAdminMeasurementProgress', () => {
+    context('Given no measurements', () => {
+        it('responds with 404', () => {
+            const user_id = 123456
+            return supertest(app)
+                .get(`/api/measurements/getAdminMeasurementProgress`)
+                .query({ user_id : user_id })
+                .expect(404, { error: { message: `Measurements do not exist` } })
+        })
+    })
+
+    context('Given there are measurements in the database', () => {
+        const testMeasurements = makeMeasurementsArray()
+        const testUsers = makeUsersArray()
+        const testContests = makeContestsArray()
+
+        beforeEach('insert users', () => {
+            return db
+                .into('users')
+                .insert(testUsers)
+        })
+        beforeEach('insert contests', () => {
+            return db
+                .into('contests')
+                .insert(testContests)
+        })
+        beforeEach('insert measurements', () => {
+            return db
+                .into('measurements')
+                .insert(testMeasurements)
+        })
+
+        it('Responds with 200 and the expected measurement', () => {
+            const user_id = 2
+            return supertest(app)
+                .get(`/api/measurements/getAdminMeasurementProgress`)
+                .query({ user_id : user_id })
+                .expect(200)
+        })
+        
+    })
+})
