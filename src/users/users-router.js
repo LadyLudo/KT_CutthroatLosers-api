@@ -128,5 +128,80 @@ usersRouter
         })
     })
 
+usersRouter
+    .route('/searchByUsername/getId/:username')
+    .all((req,res,next) => {
+        UsersService.getIdOnly(
+            req.app.get('db'),
+            req.params.username
+        )
+            .then(user => {
+                if(!user) {
+                    return res.status(404).json({
+                        error: { message: `User doesn't exist` }
+                    })
+                }
+                res.user = user
+                next()
+            })
+            .catch(next)
+    })
+    .get((req,res,next) => {
+        res.json(res.user)
+    })
+
+usersRouter
+    .route('/login/userAuth')
+    .all((req,res,next) => {
+        UsersService.userAuth(
+            req.app.get('db'),
+            req.query.username,
+            req.query.password
+        )
+            .then(user => {
+                if(!user) {
+                    return res.status(404).json({
+                        error: { message: `User doesn't exist` }
+                    })
+                }
+                res.user = user
+                next()
+            })
+            .catch(next)
+    })
+    .get((req,res,next) => {
+        if (res.user.password === req.password){
+            res.json({
+            user_id: res.user.user_id,
+            password: res.user.password,
+        })
+        } else{
+            res.status(200).send('password does not match')
+        }
+
+        
+    })
+
+usersRouter
+    .route('/adminPage/all')
+    .all((req,res,next) => {
+        UsersService.adminGetAllUsers(
+            req.app.get('db'),
+        )
+            .then(user => {
+                if(user.length === 0) {
+                    return res.status(404).json({
+                        error: { message: `Users do not exist` }
+                    })
+                }
+                res.user = user
+                next()
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json( res.user )
+    })
+
 
 module.exports = usersRouter

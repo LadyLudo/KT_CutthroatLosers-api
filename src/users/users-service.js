@@ -5,6 +5,13 @@ const UsersService = {
         .from('users')
         .orderBy('user_id')
     },
+
+    adminGetAllUsers(knex) {
+      return knex
+        .select('user_id', 'username', 'display_name')
+        .from('users')
+        .orderBy('user_id')
+    },
   
     insertUser(knex, newUser) {
       return knex
@@ -31,6 +38,14 @@ const UsersService = {
         .where('username', username)
         .first()
     },
+
+    getIdOnly(knex, username) {
+      return knex
+        .from('users')
+        .select('user_id')
+        .where('username', username)
+        .first()
+    },
   
     deleteUser(knex, user_id) {
       return knex('users')
@@ -42,6 +57,14 @@ const UsersService = {
       return knex('users')
         .where({ user_id })
         .update(newUserFields)
+    },
+
+    userAuth(knex, username) {
+      return knex
+        .from('users')
+        .select('user_id', 'password')
+        .where('username', username)
+        .first()
     },
   }
   

@@ -270,3 +270,104 @@ describe('GET /api/users/searchByUsername/:username', () => {
         
     })
 })
+
+describe('GET /api/users/userAuth', () => {
+    context('Given no users', () => {
+        it('responds with 404', () => {
+            const user_name = 'testusername@gmail.com'
+            const password = 'testpassword'
+            return supertest(app)
+                .get(`/api/users/login/userAuth`)
+                .query({ username : user_name, password: password })
+                .expect(404, { error: { message: `User doesn't exist` } })
+        })
+    })
+
+    context('Given there are users in the database', () => {
+        const testUsers = makeUsersArray()
+        
+        beforeEach('insert users', () => {
+            return db  
+                .into('users')
+                .insert(testUsers)
+        })
+
+        it('Responds with 200 and the expected user', () => {
+            const username = 'john@gmail.com'
+            const password = 'test123'
+            return supertest(app)
+                .get(`/api/users/login/userAuth`)
+                .query({ username: username, password: password})
+                .expect(200)
+        })
+
+        it('Responds with 200 and the message if passwords do not match', () => {
+            const username = 'john@gmail.com'
+            const password = 'te123'
+            return supertest(app)
+                .get(`/api/users/login/userAuth`)
+                .query({ username: username, password: password})
+                .expect(200, 'password does not match')
+        })
+        
+    })
+})
+
+describe('GET /api/adminPage/all', function() {
+    context('Given no users', () => {
+        it('responds with 404 and an error', () => {
+            return supertest(app)
+                .get('/api/users/adminPage/all')
+                .expect(404, {
+                    error: { message: `Users do not exist` }
+                })
+        })
+    })
+
+    context('Given that there are users in the database', () => {
+        const testUsers = makeUsersArray()
+
+        beforeEach('insert users', () => {
+            return db
+                .into('users')
+                .insert(testUsers)
+        })
+
+        it('Responds with 200 and all of the users', () => {
+            return supertest(app)
+                .get('/api/users/adminPage/all')
+                .expect(200)
+        })
+
+        
+    })
+})
+
+describe.only('GET /api/users/searchByUsername/getId/:username', () => {
+    context('Given no users', () => {
+        it('responds with 404', () => {
+            const username = 'stephen@gmail.com'
+            return supertest(app)
+                .get(`/api/users/searchByUsername/getId/${username}`)
+                .expect(404, { error: { message: `User doesn't exist` } })
+        })
+    })
+
+    context('Given there are users in the database', () => {
+        const testUsers = makeUsersArray()
+        
+        beforeEach('insert users', () => {
+            return db  
+                .into('users')
+                .insert(testUsers)
+        })
+
+        it('Responds with 200 and the expected user', () => {
+            const username = 'john@gmail.com'
+            return supertest(app)
+                .get(`/api/users/searchByUsername/getId/${username}`)
+                .expect(200)
+        })
+        
+    })
+})
