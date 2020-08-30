@@ -123,4 +123,27 @@ ContestsRouter
         res.json([res.contest])
     })
 
+ContestsRouter
+    .route('/contestByName/getId')
+    .all((req,res,next) => {
+        ContestsService.getIdFromName(
+            req.app.get('db'),
+            req.query.contest_name
+        )
+            .then(contest => {
+                console.log(contest, "contest")
+                if(!contest) {
+                    return res.status(404).json({
+                        error: { message: `Contest doesn't exist` }
+                    })
+                }
+                res.contest = contest
+                next()
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json([res.contest])
+    })
+
 module.exports = ContestsRouter

@@ -74,6 +74,29 @@ CurrentStatsRouter
         .get((req, res, next) => {
             res.json( res.currentstats )
         })
+        .patch( jsonParser, (req,res, next) => {
+            const { contest_id } = req.body
+            const contestIdToUpdate = { contest_id }
+    
+            const numberOfValues = Object.values(contestIdToUpdate).filter(Boolean).length
+            if (numberOfValues === 0) {
+                return res.status(400).json({
+                    error: {
+                        message: `Request body must contain 'contest_id'`
+                    }
+                })
+            }
+    
+            CurrentStatsService.addContestId(
+                req.app.get('db'),
+                req.params.user_id,
+                contestIdToUpdate
+            )
+                .then(numRowsAffected => {
+                    res.status(204).end()
+                })
+                .catch(next)
+        })
         
 
 CurrentStatsRouter
@@ -181,6 +204,30 @@ CurrentStatsRouter
         })
         .get((req, res, next) => {
             res.json( res.currentstats[0].display_name )
+        })
+
+CurrentStatsRouter
+        .route('/contestUserId/weightPageStats')
+        .all((req,res,next) => {
+            CurrentStatsService.getWeightPageStats(
+                req.app.get('db'),
+                req.query.contest_id,
+                req.query.user_id
+            )
+                .then(currentstats => {
+                    if(currentstats.length === 0) {
+                        return res.status(404).json({
+                            error: { message: `CurrentStats doesn't exist` }
+                        })
+                    }
+                    res.currentstats = currentstats
+                    next()
+        
+                })
+                .catch(next)
+        })
+        .get((req, res, next) => {
+            res.json( res.currentstats )
         })
 
       

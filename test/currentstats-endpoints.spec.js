@@ -513,3 +513,114 @@ describe('GET /api/currentstats/contestUserId/displayname', () => {
         
     })
 })
+
+describe('GET /api/currentstats/contestUserId/weightPageStats', () => {
+    context('Given no currentstats', () => {
+        it('responds with 404', () => {
+            const contest_id = 123456
+            const user_id = 1234
+            return supertest(app)
+                .get(`/api/currentstats/contestUserId/weightPageStats`)
+                .query({user_id: user_id, contest_id: contest_id})
+                .expect(404, { error: { message: `CurrentStats doesn't exist` } })
+        })
+    })
+
+    context('Given there are currentstats in the database', () => {
+        const testCurrentStats = makeCurrentStatsArray()
+        const testUsers = makeUsersArray()
+        const testContests = makeContestsArray()
+
+        beforeEach('insert users', () => {
+            return db
+                .into('users')
+                .insert(testUsers)
+        })
+        beforeEach('insert contests', () => {
+            return db
+                .into('contests')
+                .insert(testContests)
+        })
+        beforeEach('insert currentstats', () => {
+            return db
+                .into('current_stats')
+                .insert(testCurrentStats)
+        })
+
+        it('Responds with 200 and the expected contest', () => {
+            const contest_id = 1
+            const user_id = 1
+            const expectedCurrentStats = testCurrentStats.filter(currentstats => currentstats.contest_id === contest_id && currentstats.user_id === user_id)
+            return supertest(app)
+                .get(`/api/currentstats/contestUserId/weightPageStats`)
+                .query({user_id: user_id, contest_id: contest_id})
+                .expect(200)
+        })
+        
+    })
+})
+
+describe('PATCH /api/currentstats/userId/:user_id', () => {
+    context('Given no currentstats', () => {
+        it('resonds with 404', () => {
+            const user_id = 123456
+            return supertest(app)
+                .patch(`/api/currentstats/userId/${user_id}`)
+                .expect(404, { error: { message: `CurrentStats doesn't exist` } })
+        })
+    })
+
+    context('Given there are currentstats in the database', () => {
+        const testCurrentStats = makeCurrentStatsArray()
+        const testUsers = makeUsersArray()
+        const testContests = makeContestsArray()
+
+        beforeEach('insert users', () => {
+            return db
+                .into('users')
+                .insert(testUsers)
+        })
+        beforeEach('insert contests', () => {
+            return db
+                .into('contests')
+                .insert(testContests)
+        })
+        beforeEach('insert currentstats', () => {
+            return db
+                .into('current_stats')
+                .insert(testCurrentStats)
+        })
+
+        it('Responds with 204 and updates the currentstats', () => {
+            const userIdToUpdate = 1
+            const updatedCurrentStats = {
+                contest_id: 2
+            }
+            const expectedCurrentStats = {
+                ...testCurrentStats[userIdToUpdate -1],
+                ...updatedCurrentStats
+            }
+            return supertest(app)
+                .patch(`/api/currentstats/userId/${userIdToUpdate}`)
+                .send(updatedCurrentStats)
+                .expect(204)
+                .then(res => 
+                    supertest(app)
+                        .get(`/api/currentstats/userId/${userIdToUpdate}`)
+                        .expect([expectedCurrentStats])
+                )
+        })
+
+        it('Responds with 400 when no required fields supplied', () => {
+            const userIdToUpdate = 1
+            return supertest(app)
+                .patch(`/api/currentstats/userId/${userIdToUpdate}`)
+                .send({ irrelevantField: 'foo' })
+                .expect(400, {
+                    error: {
+                        message: `Request body must contain 'contest_id'`
+                    }
+                })
+        })
+    })
+})

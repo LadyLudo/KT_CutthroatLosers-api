@@ -445,7 +445,7 @@ describe('GET /api/measurements/getMeasurementInfo', () => {
     })
 })
 
-describe.only('GET /api/measurements/getAdminMeasurementProgress', () => {
+describe('GET /api/measurements/getAdminMeasurementProgress', () => {
     context('Given no measurements', () => {
         it('responds with 404', () => {
             const user_id = 123456

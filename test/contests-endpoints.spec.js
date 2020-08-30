@@ -271,3 +271,35 @@ describe('GET /api/contests/contestName/:contest_name', () => {
         
     })
 })
+
+describe('GET /api/contests/contestName/getId', () => {
+    context('Given no contests', () => {
+        it('responds with 404', () => {
+            const contest_name = 'faketestcontest'
+            return supertest(app)
+                .get(`/api/contests/contestByName/getId`)
+                .query({contest_name: contest_name})
+                .expect(404, { error: { message: `Contest doesn't exist` } })
+        })
+    })
+
+    context('Given there are contests in the database', () => {
+        const testContests = makeContestsArray()
+        
+        beforeEach('insert contests', () => {
+            return db  
+                .into('contests')
+                .insert(testContests)
+        })
+
+        it('Responds with 200 and the expected contest', () => {
+            const testcontest_name = 'test contest 1'
+            const expectedContest = testContests.filter(contest => contest.contest_name === testcontest_name)
+            return supertest(app)
+                .get(`/api/contests/contestByName/getId`)
+                .query({contest_name: testcontest_name})
+                .expect(200)
+        })
+        
+    })
+})

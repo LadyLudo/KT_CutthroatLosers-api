@@ -31,6 +31,14 @@ const ContestsService = {
         .where('contest_name', contest_name)
         .first()
     },
+
+    getIdFromName(knex, contest_name) {
+      return knex
+        .from('contests')
+        .select('contest_id')
+        .where('contest_name', contest_name)
+        .first()
+    },
   
     deleteContest(knex, contest_id) {
       return knex('contests')
