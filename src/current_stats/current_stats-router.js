@@ -16,8 +16,8 @@ CurrentStatsRouter
             .catch(next)
     })
     .post(jsonParser, (req,res,next) => {
-        const { user_id, current_weight, goal_weight, display_name, contest_id } = req.body
-        const newCurrentStats = { user_id, current_weight, goal_weight, display_name, contest_id }
+        const { user_id, current_weight, goal_weight, display_name } = req.body
+        const newCurrentStats = { user_id, current_weight, goal_weight, display_name }
 
         for (const [key, value] of Object.entries(newCurrentStats)) {
             if (value == null) {
