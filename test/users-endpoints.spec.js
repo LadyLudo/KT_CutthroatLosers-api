@@ -343,7 +343,7 @@ describe('GET /api/adminPage/all', function() {
     })
 })
 
-describe.only('GET /api/users/searchByUsername/getId/:username', () => {
+describe('GET /api/users/searchByUsername/getId/:username', () => {
     context('Given no users', () => {
         it('responds with 404', () => {
             const username = 'stephen@gmail.com'

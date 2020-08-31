@@ -31,12 +31,19 @@ const ContestUserService = {
     },
 
     getById(knex, id) {
-      return knex
-        .from('contest_to_user')
-        .select('*')
-        .where('id', id)
-        .first()
-  },
+        return knex
+          .from('contest_to_user')
+          .select('*')
+          .where('id', id)
+          .first()
+    },
+
+    getOnlyUserId(knex, contest_id) {
+        return knex
+          .from('contest_to_user')
+          .select('user_id')
+          .where('contest_id', contest_id)
+    },
   
     deleteContestUser(knex, user_id) {
       return knex('contest_to_user')

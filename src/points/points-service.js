@@ -37,6 +37,13 @@ const PointsService = {
           .where('id', id)
           .first()
       },
+
+    getTotalUserPoints(knex, user_id, contest_id) {
+        return knex
+          .from('points')
+          .sum('points')
+          .where({ user_id, contest_id })
+    },
   
     deletePoints(knex, id) {
       return knex('points')

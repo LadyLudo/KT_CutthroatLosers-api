@@ -162,4 +162,30 @@ PointsRouter
             .catch(next)
     })
 
+PointsRouter
+    .route('/totalUserPoints')
+    .all((req,res,next) => {
+        PointsService.getTotalUserPoints(
+            req.app.get('db'),
+            req.query.user_id,
+            req.query.contest_id
+        )
+            .then(points => {
+                console.log(points, "points")
+                if(points[0].sum === null) {
+                    return res.status(404).json({
+                        error: { message: `Points do not exist` }
+                    })
+                }
+                
+                res.points = points
+                next()
+    
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json( res.points )
+    })
+
 module.exports = PointsRouter

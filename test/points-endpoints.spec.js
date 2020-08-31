@@ -428,3 +428,48 @@ describe('PATCH /api/points/id/:id', () => {
         })
     })
 })
+
+describe.only('GET /api/points/totalUserPoints', () => {
+    context('Given no points', () => {
+        it('responds with 404', () => {
+            const contest_id = 99999
+            const user_id = 1234
+            return supertest(app)
+                .get(`/api/points/totalUserPoints`)
+                .query({ user_id, contest_id })
+                .expect(404, { error: { message: `Points do not exist` } })
+        })
+    })
+
+    context('Given there are points in the database', () => {
+        const testPoints = makePointsArray()
+        const testUsers = makeUsersArray()
+        const testContests = makeContestsArray()
+
+        beforeEach('insert users', () => {
+            return db
+                .into('users')
+                .insert(testUsers)
+        })
+        beforeEach('insert contests', () => {
+            return db
+                .into('contests')
+                .insert(testContests)
+        })
+        beforeEach('insert points', () => {
+            return db
+                .into('points')
+                .insert(testPoints)
+        })
+
+        it('Responds with 200 and the expected points', () => {
+            const contest_id = 1
+            const user_id = 1
+            return supertest(app)
+                .get(`/api/points/totalUserPoints`)
+                .query({ user_id, contest_id })
+                .expect(200, '[{"sum":"18"}]')
+        })
+        
+    })
+})

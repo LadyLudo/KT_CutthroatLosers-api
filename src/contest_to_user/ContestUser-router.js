@@ -144,4 +144,27 @@ contestUserRouter
     })
 
 
+contestUserRouter
+    .route('/getOnlyUserId')
+    .all((req,res,next) => {
+        ContestUserService.getOnlyUserId(
+            req.app.get('db'),
+            req.query.contest_id
+        )
+            .then(contestUser => {
+                if(contestUser.length === 0) {
+                    return res.status(404).json({
+                        error: { message: `ContestUser doesn't exist` }
+                    })
+                }
+                res.contestUser = contestUser
+                next()
+    
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json( res.contestUser )
+    })
+
 module.exports = contestUserRouter
