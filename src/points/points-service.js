@@ -44,6 +44,27 @@ const PointsService = {
           .sum('points')
           .where({ user_id, contest_id })
     },
+
+    getUserStomachPoints(knex, user_id, contest_id) {
+      return knex
+        .from('points')
+        .sum('points')
+        .where({ user_id: user_id, contest_id: contest_id, category: 'stomach' })
+    },
+
+    getUserWeightPoints(knex, user_id, contest_id) {
+      return knex
+        .from('points')
+        .sum('points')
+        .where({ user_id: user_id, contest_id: contest_id, category: 'weight' })
+    },
+
+    getUserWorkoutPoints(knex, user_id, contest_id) {
+      return knex
+        .from('points')
+        .sum('points')
+        .where({ user_id: user_id, contest_id: contest_id, category: 'workout' })
+    },
   
     deletePoints(knex, id) {
       return knex('points')

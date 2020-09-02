@@ -16,6 +16,14 @@ const WeighinService = {
         })
     },
   
+    getContestWeighins(knex, contest_id, user_id) {
+      return knex
+        .from('weighin')
+        .select(knex.raw('CAST(date_created AS DATE), CAST (weight AS DOUBLE PRECISION)'))
+        .where({ contest_id, user_id }) 
+        .orderBy('date_created')  
+    },
+
     getByUserId(knex, user_id) {
       return knex
         .from('weighin')
@@ -36,6 +44,24 @@ const WeighinService = {
           .select('*')
           .where('id', id)
           .first()
+      },
+
+    getUserWeights(knex, user_id) {
+        return knex
+          .from('weighin')
+          .select('weight')
+          .where('user_id', user_id)
+          .orderBy('date_created') 
+          .limit(1)  
+      },
+
+      getAdminUserWeights(knex, user_id) {
+        return knex
+          .from('weighin')
+          .select(knex.raw('CAST (weight AS DOUBLE PRECISION), date_created'))
+          .where('user_id', user_id)
+          .orderBy('date_created') 
+          .limit(2)  
       },
   
     deleteWeighin(knex, id) {

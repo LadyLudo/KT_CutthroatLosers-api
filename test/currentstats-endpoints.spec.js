@@ -215,8 +215,7 @@ describe('POST /api/currentstats/', () => {
                 user_id: 1,
                 current_weight: "123",
                 goal_weight: '123',
-                display_name: "John Test",
-                contest_id: 2
+                display_name: "John Test"
             }
             return supertest(app)
                 .post('/api/currentstats')
@@ -227,7 +226,6 @@ describe('POST /api/currentstats/', () => {
                     expect(res.body.current_weight).to.eql(newCurrentStats.current_weight)
                     expect(res.body.goal_weight).to.eql(newCurrentStats.goal_weight)
                     expect(res.body.display_name).to.eql(newCurrentStats.display_name)
-                    expect(res.body.contest_id).to.eql(newCurrentStats.contest_id)
                 })
                 .then(postRes => 
                     supertest(app)
@@ -238,7 +236,7 @@ describe('POST /api/currentstats/', () => {
     })
 
 
-    const requiredFields = ['user_id', 'current_weight', 'goal_weight', 'display_name', 'contest_id']
+    const requiredFields = ['user_id', 'current_weight', 'goal_weight', 'display_name']
     requiredFields.forEach(field => {
         const newCurrentStats = {
             user_id: 4,

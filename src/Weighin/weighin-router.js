@@ -150,4 +150,79 @@ WeighinRouter
             .catch(next)
     })
 
+WeighinRouter
+    .route('/getContestWeighins')
+    .all((req,res,next) => {
+        WeighinService.getContestWeighins(
+            req.app.get('db'),
+            req.query.user_id,
+            req.query.contest_id
+        )
+            .then(weighins => {
+                if(weighins.length === 0) {
+                    return res.status(404).json({
+                        error: { message: `Weighins do not exist` }
+                    })
+                }
+                
+                res.weighins = weighins
+                next()
+    
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json( res.weighins )
+    })
+
+WeighinRouter
+    .route('/getUserWeights')
+    .all((req,res,next) => {
+        WeighinService.getUserWeights(
+            req.app.get('db'),
+            req.query.user_id
+        )
+            .then(weighins => {
+                if(weighins.length === 0) {
+                    return res.status(404).json({
+                        error: { message: `Weighins do not exist` }
+                    })
+                }
+                
+                res.weighins = weighins
+                next()
+    
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json( res.weighins )
+    })
+
+WeighinRouter
+    .route('/getAdminUserWeights')
+    .all((req,res,next) => {
+        WeighinService.getAdminUserWeights(
+            req.app.get('db'),
+            req.query.user_id
+        )
+            .then(weighins => {
+                if(weighins.length === 0) {
+                    return res.status(404).json({
+                        error: { message: `Weighins do not exist` }
+                    })
+                }
+                
+                res.weighins = weighins
+                next()
+    
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json( res.weighins )
+    })
+
+
+
 module.exports = WeighinRouter

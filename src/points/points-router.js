@@ -188,4 +188,79 @@ PointsRouter
         res.json( res.points )
     })
 
+PointsRouter
+    .route('/userStomachPoints')
+    .all((req,res,next) => {
+        PointsService.getUserStomachPoints(
+            req.app.get('db'),
+            req.query.user_id,
+            req.query.contest_id
+        )
+            .then(points => {
+                if(points[0].sum === null) {
+                    return res.status(404).json({
+                        error: { message: `Points do not exist` }
+                    })
+                }
+                
+                res.points = points
+                next()
+    
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json( res.points )
+    })
+
+PointsRouter
+    .route('/userWeightPoints')
+    .all((req,res,next) => {
+        PointsService.getUserWeightPoints(
+            req.app.get('db'),
+            req.query.user_id,
+            req.query.contest_id
+        )
+            .then(points => {
+                if(points[0].sum === null) {
+                    return res.status(404).json({
+                        error: { message: `Points do not exist` }
+                    })
+                }
+                
+                res.points = points
+                next()
+    
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json( res.points )
+    })
+
+PointsRouter
+    .route('/userWorkoutPoints')
+    .all((req,res,next) => {
+        PointsService.getUserWorkoutPoints(
+            req.app.get('db'),
+            req.query.user_id,
+            req.query.contest_id
+        )
+            .then(points => {
+                if(points[0].sum === null) {
+                    return res.status(404).json({
+                        error: { message: `Points do not exist` }
+                    })
+                }
+                
+                res.points = points
+                next()
+    
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json( res.points )
+    })
+
 module.exports = PointsRouter

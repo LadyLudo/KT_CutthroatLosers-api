@@ -399,3 +399,139 @@ describe('PATCH /api/weighins/id/:id', () => {
         })
     })
 })
+
+describe('GET /api/weighins/getContestWeighins', function() {
+    context('Given no weighins', () => {
+        const user_id = 123
+        const contest_id = 1234
+        it('responds with 200 and an empty list', () => {
+            return supertest(app)
+                .get('/api/weighins/getContestWeighins')
+                .query({user_id: user_id, contest_id: contest_id})
+                .expect(404, {
+                    error: { message: `Weighins do not exist` }
+                })
+        })
+    })
+
+    context('Given that there are weighins in the database', () => {
+        const testWeighins = makeWeighinsArray()
+        const testUsers = makeUsersArray()
+        const testContests = makeContestsArray()
+
+        beforeEach('insert users', () => {
+            return db
+                .into('users')
+                .insert(testUsers)
+        })
+        beforeEach('insert contests', () => {
+            return db
+                .into('contests')
+                .insert(testContests)
+        })
+        beforeEach('insert weighins', () => {
+            return db
+                .into('weighin')
+                .insert(testWeighins)
+        })
+
+        it('Responds with 200 and the weighins', () => {
+            const user_id = 1
+            const contest_id = 1
+            return supertest(app)
+                .get('/api/weighins/getContestWeighins')
+                .query({user_id: user_id, contest_id: contest_id})
+                .expect(200)
+        })
+
+        
+    })
+})
+
+describe('GET /api/weighins/getUserWeights', () => {
+    context('Given no weighins', () => {
+        it('responds with 404', () => {
+            const user_id = 99999
+            return supertest(app)
+                .get(`/api/weighins/getUserWeights`)
+                .query({ user_id: user_id })
+                .expect(404, { error: { message: `Weighins do not exist` } })
+        })
+    })
+
+    context('Given there are weighins in the database', () => {
+        const testWeighins = makeWeighinsArray()
+        const testUsers = makeUsersArray()
+        const testContests = makeContestsArray()
+
+        beforeEach('insert users', () => {
+            return db
+                .into('users')
+                .insert(testUsers)
+        })
+        beforeEach('insert contests', () => {
+            return db
+                .into('contests')
+                .insert(testContests)
+        })
+        beforeEach('insert weighins', () => {
+            return db
+                .into('weighin')
+                .insert(testWeighins)
+        })
+
+        it('Responds with 200 and the expected weighins', () => {
+            const user_id = 1
+            const expectedWeighins = testWeighins.filter(weighin => weighin.user_id === user_id)
+            return supertest(app)
+                .get(`/api/weighins/getUserWeights`)
+                .query({ user_id: user_id })
+                .expect(200)
+        })
+        
+    })
+})
+
+describe.only('GET /api/weighins/getAdminUserWeights', () => {
+    context('Given no weighins', () => {
+        it('responds with 404', () => {
+            const user_id = 99999
+            return supertest(app)
+                .get(`/api/weighins/getAdminUserWeights`)
+                .query({ user_id: user_id })
+                .expect(404, { error: { message: `Weighins do not exist` } })
+        })
+    })
+
+    context('Given there are weighins in the database', () => {
+        const testWeighins = makeWeighinsArray()
+        const testUsers = makeUsersArray()
+        const testContests = makeContestsArray()
+
+        beforeEach('insert users', () => {
+            return db
+                .into('users')
+                .insert(testUsers)
+        })
+        beforeEach('insert contests', () => {
+            return db
+                .into('contests')
+                .insert(testContests)
+        })
+        beforeEach('insert weighins', () => {
+            return db
+                .into('weighin')
+                .insert(testWeighins)
+        })
+
+        it('Responds with 200 and the expected weighins', () => {
+            const user_id = 1
+            const expectedWeighins = testWeighins.filter(weighin => weighin.user_id === user_id)
+            return supertest(app)
+                .get(`/api/weighins/getAdminUserWeights`)
+                .query({ user_id: user_id })
+                .expect(200)
+        })
+        
+    })
+})
