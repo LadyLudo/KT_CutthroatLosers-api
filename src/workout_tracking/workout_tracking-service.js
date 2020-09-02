@@ -37,6 +37,22 @@ const WorkoutTrackingService = {
           .where('id', id)
           .first()
       },
+
+    getWorkoutData(knex, user_id, contest_id, category) {
+        return knex
+          .from('workout_tracking')
+          .select('date_created','category')
+          .where({ user_id: user_id, contest_id: contest_id, category: category})
+          .orderBy('date_created')
+      },
+
+      getDates(knex, user_id, contest_id) {
+        return knex
+          .from('workout_tracking')
+          .select('date_created')
+          .where({ user_id: user_id, contest_id: contest_id})
+          .orderBy('date_created')
+      },
   
     deleteWorkout(knex, id) {
       return knex('workout_tracking')

@@ -396,3 +396,95 @@ describe('PATCH /api/workouts/id/:id', () => {
         })
     })
 })
+
+describe('GET /api/workouts/getWorkoutData', () => {
+    context('Given no workouts', () => {
+        it('responds with 404', () => {
+            const user_id = 99999
+            const contest_id = 123
+            const category = 'cardio'
+            return supertest(app)
+                .get(`/api/workouts/getWorkoutData`)
+                .query({user_id: user_id, contest_id: contest_id, category: category})
+                .expect(404, { error: { message: `Workouts do not exist` } })
+        })
+    })
+
+    context('Given there are workouts in the database', () => {
+        const testWorkouts = makeWorkoutArray()
+        const testUsers = makeUsersArray()
+        const testContests = makeContestsArray()
+
+        beforeEach('insert users', () => {
+            return db
+                .into('users')
+                .insert(testUsers)
+        })
+        beforeEach('insert contests', () => {
+            return db
+                .into('contests')
+                .insert(testContests)
+        })
+        beforeEach('insert workouts', () => {
+            return db
+                .into('workout_tracking')
+                .insert(testWorkouts)
+        })
+
+        it('Responds with 200 and the expected workouts', () => {
+            const user_id = 1
+            const contest_id = 1
+            const category = 'cardio'
+            return supertest(app)
+                .get(`/api/workouts/getWorkoutData`)
+                .query({user_id: user_id, contest_id: contest_id, category: category})
+                .expect(200)
+        })
+        
+    })
+})
+
+describe('GET /api/workouts/getDates', () => {
+    context('Given no workouts', () => {
+        it('responds with 404', () => {
+            const user_id = 99999
+            const contest_id = 123
+            return supertest(app)
+                .get(`/api/workouts/getDates`)
+                .query({user_id: user_id, contest_id: contest_id})
+                .expect(404, { error: { message: `Workouts do not exist` } })
+        })
+    })
+
+    context('Given there are workouts in the database', () => {
+        const testWorkouts = makeWorkoutArray()
+        const testUsers = makeUsersArray()
+        const testContests = makeContestsArray()
+
+        beforeEach('insert users', () => {
+            return db
+                .into('users')
+                .insert(testUsers)
+        })
+        beforeEach('insert contests', () => {
+            return db
+                .into('contests')
+                .insert(testContests)
+        })
+        beforeEach('insert workouts', () => {
+            return db
+                .into('workout_tracking')
+                .insert(testWorkouts)
+        })
+
+        it('Responds with 200 and the expected workouts', () => {
+            const user_id = 1
+            const contest_id = 1
+            return supertest(app)
+                .get(`/api/workouts/getDates`)
+                .query({user_id: user_id, contest_id: contest_id})
+                .expect(200)
+        })
+        
+    })
+})

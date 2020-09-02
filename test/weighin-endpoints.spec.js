@@ -492,7 +492,7 @@ describe('GET /api/weighins/getUserWeights', () => {
     })
 })
 
-describe.only('GET /api/weighins/getAdminUserWeights', () => {
+describe('GET /api/weighins/getAdminUserWeights', () => {
     context('Given no weighins', () => {
         it('responds with 404', () => {
             const user_id = 99999

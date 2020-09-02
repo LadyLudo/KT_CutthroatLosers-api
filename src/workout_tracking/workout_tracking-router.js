@@ -150,5 +150,56 @@ WorkoutRouter
             .catch(next)
     })
 
+WorkoutRouter
+    .route('/getWorkoutData')
+    .all((req,res,next) => {
+        WorkoutTrackingService.getWorkoutData(
+            req.app.get('db'),
+            req.query.user_id,
+            req.query.contest_id,
+            req.query.category
+        )
+            .then(workouts => {
+                if(workouts.length === 0) {
+                    return res.status(404).json({
+                        error: { message: `Workouts do not exist` }
+                    })
+                }
+                
+                res.workouts = workouts
+                next()
+    
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json( res.workouts )
+    })
+
+WorkoutRouter
+    .route('/getDates')
+    .all((req,res,next) => {
+        WorkoutTrackingService.getDates(
+            req.app.get('db'),
+            req.query.user_id,
+            req.query.contest_id
+        )
+            .then(workouts => {
+                if(workouts.length === 0) {
+                    return res.status(404).json({
+                        error: { message: `Workouts do not exist` }
+                    })
+                }
+                
+                res.workouts = workouts
+                next()
+    
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json( res.workouts )
+    })
+
 
 module.exports = WorkoutRouter
