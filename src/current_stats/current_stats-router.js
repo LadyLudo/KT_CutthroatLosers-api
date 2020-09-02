@@ -187,10 +187,11 @@ CurrentStatsRouter
         .all((req,res,next) => {
             CurrentStatsService.getDisplayName(
                 req.app.get('db'),
-                req.query.contest_id,
-                req.query.user_id
+                req.query.user_id,
+                req.query.contest_id
             )
                 .then(currentstats => {
+                    console.log(currentstats, 'currentstats')
                     if(currentstats.length === 0) {
                         return res.status(404).json({
                             error: { message: `CurrentStats doesn't exist` }

@@ -501,14 +501,14 @@ describe('GET /api/currentstats/contestUserId/displayname', () => {
 
         it('Responds with 200 and the expected contest', () => {
             const contest_id = 1
-            const user_id = 1
+            const user_id = 2
             const expectedCurrentStats = testCurrentStats.filter(currentstats => currentstats.contest_id === contest_id && currentstats.user_id === user_id)
             return supertest(app)
                 .get(`/api/currentstats/contestUserId/displayname`)
                 .query({user_id: user_id, contest_id: contest_id})
                 .expect(200, `"${expectedCurrentStats[0].display_name}"`)
         })
-        
+    
     })
 })
 
