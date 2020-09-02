@@ -51,7 +51,7 @@ const WeighinService = {
           .from('weighin')
           .select('weight')
           .where('user_id', user_id)
-          .orderBy('date_created', desc) 
+          .orderBy('date_created') 
           .limit(1)  
       },
 
