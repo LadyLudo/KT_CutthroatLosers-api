@@ -295,6 +295,7 @@ describe('GET /api/users/userAuth', () => {
         it('Responds with 200 and the expected user', () => {
             const username = 'john@gmail.com'
             const password = 'test123'
+            const expectedUser = testUsers[0]
             return supertest(app)
                 .get(`/api/users/login/userAuth`)
                 .query({ username: username, password: password})

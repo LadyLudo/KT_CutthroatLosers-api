@@ -170,7 +170,7 @@ usersRouter
             .catch(next)
     })
     .get((req,res,next) => {
-        if (res.user.password === req.password){
+        if (res.user.password === req.query.password){
             res.json({
             user_id: res.user.user_id,
             password: res.user.password,
