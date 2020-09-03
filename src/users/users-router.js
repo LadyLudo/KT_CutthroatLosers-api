@@ -108,9 +108,9 @@ usersRouter
             req.params.username
         )
             .then(user => {
-                if(!user) {
+                if(user) {
                     return res.status(404).json({
-                        error: { message: `User doesn't exist` }
+                        error: { message: `User already exists` }
                     })
                 }
                 res.user = user
@@ -119,13 +119,7 @@ usersRouter
             .catch(next)
     })
     .get((req,res,next) => {
-        res.json({
-            user_id: res.user.user_id,
-            password: res.user.password,
-            display_name: res.user.display_name,
-            date_created: res.user.date_created,
-            username: res.user.username
-        })
+        res.json()
     })
 
 usersRouter

@@ -240,13 +240,13 @@ describe('PATCH /api/users/:user_id', () => {
     })
 })
 
-describe('GET /api/users/searchByUsername/:username', () => {
+describe.only('GET /api/users/searchByUsername/:username', () => {
     context('Given no users', () => {
-        it('responds with 404', () => {
+        it('responds with 200 and an empty array', () => {
             const username = 'stephen@gmail.com'
             return supertest(app)
                 .get(`/api/users/searchByUsername/${username}`)
-                .expect(404, { error: { message: `User doesn't exist` } })
+                .expect(200, '')
         })
     })
 
@@ -265,7 +265,7 @@ describe('GET /api/users/searchByUsername/:username', () => {
             const expectedUser = testUsers[user_id -1]
             return supertest(app)
                 .get(`/api/users/searchByUsername/${username}`)
-                .expect(200, expectedUser)
+                .expect(404, { error: { message: `User already exists` }})
         })
         
     })
