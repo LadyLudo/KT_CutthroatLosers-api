@@ -431,13 +431,13 @@ describe('PATCH /api/points/id/:id', () => {
 
 describe('GET /api/points/totalUserPoints', () => {
     context('Given no points', () => {
-        it('responds with 404', () => {
+        it('responds with 200 and an empty array', () => {
             const contest_id = 99999
             const user_id = 1234
             return supertest(app)
                 .get(`/api/points/totalUserPoints`)
                 .query({ user_id, contest_id })
-                .expect(404, { error: { message: `Points do not exist` } })
+                .expect(200, [ { sum: null } ])
         })
     })
 

@@ -70,7 +70,7 @@ describe('GET /api/contesttouser', function() {
     })
 })
 
-describe.only('GET /api/contesttouser/userId/:user_id', () => {
+describe('GET /api/contesttouser/userId/:user_id', () => {
     context('Given no contestUsers', () => {
         it('responds with 200 and an empty array', () => {
             const user_id = 123456

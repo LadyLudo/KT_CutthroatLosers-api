@@ -171,12 +171,6 @@ PointsRouter
             req.query.contest_id
         )
             .then(points => {
-                console.log(points, "points")
-                if(points[0].sum === null) {
-                    return res.status(404).json({
-                        error: { message: `Points do not exist` }
-                    })
-                }
                 
                 res.points = points
                 next()
