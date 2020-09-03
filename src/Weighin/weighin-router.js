@@ -155,8 +155,8 @@ WeighinRouter
     .all((req,res,next) => {
         WeighinService.getContestWeighins(
             req.app.get('db'),
-            req.query.user_id,
-            req.query.contest_id
+            req.query.contest_id,
+            req.query.user_id
         )
             .then(weighins => {
                 if(weighins.length === 0) {
