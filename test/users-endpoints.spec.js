@@ -240,7 +240,7 @@ describe('PATCH /api/users/:user_id', () => {
     })
 })
 
-describe.only('GET /api/users/searchByUsername/:username', () => {
+describe('GET /api/users/searchByUsername/:username', () => {
     context('Given no users', () => {
         it('responds with 200 and an empty array', () => {
             const username = 'stephen@gmail.com'
