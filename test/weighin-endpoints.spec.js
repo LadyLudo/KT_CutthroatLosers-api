@@ -492,12 +492,12 @@ describe('GET /api/weighins/getUserWeights', () => {
 
 describe('GET /api/weighins/getAdminUserWeights', () => {
     context('Given no weighins', () => {
-        it('responds with 404', () => {
+        it('responds with 200 and an empty array', () => {
             const user_id = 99999
             return supertest(app)
                 .get(`/api/weighins/getAdminUserWeights`)
                 .query({ user_id: user_id })
-                .expect(404, { error: { message: `Weighins do not exist` } })
+                .expect(200, [])
         })
     })
 

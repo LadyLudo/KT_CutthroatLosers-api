@@ -180,11 +180,6 @@ WorkoutRouter
             req.query.contest_id
         )
             .then(workouts => {
-                if(workouts.length === 0) {
-                    return res.status(404).json({
-                        error: { message: `Workouts do not exist` }
-                    })
-                }
                 
                 res.workouts = workouts
                 next()

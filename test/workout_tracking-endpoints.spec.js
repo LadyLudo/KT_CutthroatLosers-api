@@ -446,13 +446,13 @@ describe('GET /api/workouts/getWorkoutData', () => {
 
 describe('GET /api/workouts/getDates', () => {
     context('Given no workouts', () => {
-        it('responds with 404', () => {
+        it('responds with 200 and an empty array', () => {
             const user_id = 99999
             const contest_id = 123
             return supertest(app)
                 .get(`/api/workouts/getDates`)
                 .query({user_id: user_id, contest_id: contest_id})
-                .expect(404, { error: { message: `Workouts do not exist` } })
+                .expect(200, [])
         })
     })
 
