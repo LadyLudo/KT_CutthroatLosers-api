@@ -42,7 +42,7 @@ const WorkoutTrackingService = {
         return knex
           .from('workout_tracking')
           .select('date_created','category')
-          .where({ user_id: user_id, contest_id: contest_id, category: category})
+          .where({ contest_id: contest_id, user_id: user_id, category: category})
           .orderBy('date_created')
       },
 

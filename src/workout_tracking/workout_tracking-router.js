@@ -155,8 +155,8 @@ WorkoutRouter
     .all((req,res,next) => {
         WorkoutTrackingService.getWorkoutData(
             req.app.get('db'),
-            req.query.user_id,
             req.query.contest_id,
+            req.query.user_id,
             req.query.category
         )
             .then(workouts => {
