@@ -41,7 +41,7 @@ const WorkoutTrackingService = {
     getWorkoutData(knex, contest_id, user_id, category) {
         return knex
           .from('workout_tracking')
-          .select('date_created','category')
+          .select('date_created')
           .where({ contest_id: contest_id, user_id: user_id, category: category})
           .orderBy('date_created')
       },

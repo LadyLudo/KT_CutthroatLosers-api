@@ -397,7 +397,7 @@ describe('PATCH /api/workouts/id/:id', () => {
     })
 })
 
-describe('GET /api/workouts/getWorkoutData', () => {
+describe.only('GET /api/workouts/getWorkoutData', () => {
     context('Given no workouts', () => {
         it('responds with 404', () => {
             const user_id = 99999
@@ -432,13 +432,13 @@ describe('GET /api/workouts/getWorkoutData', () => {
         })
 
         it('Responds with 200 and the expected workouts', () => {
-            const user_id = 1
+            const user_id = 2
             const contest_id = 1
             const category = 'cardio'
             return supertest(app)
                 .get(`/api/workouts/getWorkoutData`)
                 .query({user_id: user_id, contest_id: contest_id, category: category})
-                .expect(200)
+                .expect(200, 'stuff')
         })
         
     })
