@@ -38,7 +38,7 @@ const WorkoutTrackingService = {
           .first()
       },
 
-    getWorkoutData(knex, user_id, contest_id, category) {
+    getWorkoutData(knex, contest_id, user_id, category) {
         return knex
           .from('workout_tracking')
           .select('date_created','category')
