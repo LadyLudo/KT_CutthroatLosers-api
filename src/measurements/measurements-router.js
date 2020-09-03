@@ -157,11 +157,7 @@ MeasurementsRouter
             req.query.user_id
         )
             .then(measurements => {
-                if(measurements.length === 0) {
-                    return res.status(404).json({
-                        error: { message: `Measurements do not exist` }
-                    })
-                }
+                
                 res.measurements = measurements
                 next()
     

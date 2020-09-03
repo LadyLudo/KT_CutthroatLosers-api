@@ -408,9 +408,7 @@ describe('GET /api/weighins/getContestWeighins', function() {
             return supertest(app)
                 .get('/api/weighins/getContestWeighins')
                 .query({user_id: user_id, contest_id: contest_id})
-                .expect(404, {
-                    error: { message: `Weighins do not exist` }
-                })
+                .expect(200, [])
         })
     })
 

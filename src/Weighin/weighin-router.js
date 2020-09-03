@@ -159,11 +159,6 @@ WeighinRouter
             req.query.user_id
         )
             .then(weighins => {
-                if(weighins.length === 0) {
-                    return res.status(404).json({
-                        error: { message: `Weighins do not exist` }
-                    })
-                }
                 
                 res.weighins = weighins
                 next()

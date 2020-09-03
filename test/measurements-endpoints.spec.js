@@ -402,13 +402,13 @@ describe('PATCH /api/measurements/id/:id', () => {
 
 describe('GET /api/measurements/getMeasurementInfo', () => {
     context('Given no measurements', () => {
-        it('responds with 404', () => {
+        it('responds with 200 and an empty array', () => {
             const user_id = 123456
             const contest_id = 123
             return supertest(app)
                 .get(`/api/measurements/getMeasurementInfo`)
                 .query({ user_id : user_id, contest_id: contest_id})
-                .expect(404, { error: { message: `Measurements do not exist` } })
+                .expect(200, [])
         })
     })
 
