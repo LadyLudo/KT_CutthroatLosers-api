@@ -447,12 +447,12 @@ describe('GET /api/measurements/getMeasurementInfo', () => {
 
 describe('GET /api/measurements/getAdminMeasurementProgress', () => {
     context('Given no measurements', () => {
-        it('responds with 404', () => {
+        it('responds with 200 and en empty array', () => {
             const user_id = 123456
             return supertest(app)
                 .get(`/api/measurements/getAdminMeasurementProgress`)
                 .query({ user_id : user_id })
-                .expect(404, { error: { message: `Measurements do not exist` } })
+                .expect(200, [])
         })
     })
 
