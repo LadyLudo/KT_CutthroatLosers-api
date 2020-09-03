@@ -397,16 +397,16 @@ describe('PATCH /api/workouts/id/:id', () => {
     })
 })
 
-describe.only('GET /api/workouts/getWorkoutData', () => {
+describe('GET /api/workouts/getWorkoutData', () => {
     context('Given no workouts', () => {
-        it('responds with 404', () => {
+        it('responds with 200 and and empty array', () => {
             const user_id = 99999
             const contest_id = 123
             const category = 'cardio'
             return supertest(app)
                 .get(`/api/workouts/getWorkoutData`)
                 .query({user_id: user_id, contest_id: contest_id, category: category})
-                .expect(404, { error: { message: `Workouts do not exist` } })
+                .expect(200, [])
         })
     })
 
@@ -438,7 +438,7 @@ describe.only('GET /api/workouts/getWorkoutData', () => {
             return supertest(app)
                 .get(`/api/workouts/getWorkoutData`)
                 .query({user_id: user_id, contest_id: contest_id, category: category})
-                .expect(200, 'stuff')
+                .expect(200)
         })
         
     })

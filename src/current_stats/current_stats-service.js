@@ -51,11 +51,11 @@ const CurrentStatsService = {
           .where({user_id, contest_id})
       },
 
-    getWeightPageStats(knex, user_id, contest_id) {
+    getWeightPageStats(knex, contest_id, user_id) {
         return knex
           .from('current_stats')
           .select('current_weight', 'goal_weight', 'display_name')
-          .where({user_id, contest_id})
+          .where({contest_id, user_id})
       },
   
     deleteCurrentStats(knex, user_id, contest_id) {
