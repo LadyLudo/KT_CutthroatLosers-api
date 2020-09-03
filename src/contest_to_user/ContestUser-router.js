@@ -47,11 +47,7 @@ contestUserRouter
             req.params.user_id
         )
             .then(contestUser => {
-                if(contestUser.length === 0) {
-                    return res.status(404).json({
-                        error: { message: `ContestUser doesn't exist` }
-                    })
-                }
+            
                 res.contestUser = contestUser
                 next()
     

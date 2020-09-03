@@ -70,13 +70,13 @@ describe('GET /api/contesttouser', function() {
     })
 })
 
-describe('GET /api/contesttouser/userId/:user_id', () => {
+describe.only('GET /api/contesttouser/userId/:user_id', () => {
     context('Given no contestUsers', () => {
-        it('responds with 404', () => {
+        it('responds with 200 and an empty array', () => {
             const user_id = 123456
             return supertest(app)
                 .get(`/api/contesttouser/userId/${user_id}`)
-                .expect(404, { error: { message: `ContestUser doesn't exist` } })
+                .expect(200, [])
         })
     })
 
