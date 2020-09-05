@@ -1,5 +1,6 @@
 const express = require('express')
 const UsersService = require('./users-service')
+const bcrypt = require('bcrypt')
 
 const usersRouter = express.Router()
 const jsonParser = express.json()
@@ -26,17 +27,25 @@ usersRouter
                 })
             }
         }
+        bcrypt.hash(newUser.password, 10)
+            .then((hash) => {
+                const hashedUser = {
+                    password: hash,
+                    display_name: newUser.display_name,
+                    username: newUser.username
+                }
+                UsersService.insertUser(
+                    req.app.get('db'),
+                    hashedUser
+                  )
+                    .then(user => {
+                      res
+                        .status(201)
+                        .json(user)
+                    })
+                    .catch(next)
+            })
 
-        UsersService.insertUser(
-          req.app.get('db'),
-          newUser
-        )
-          .then(user => {
-            res
-              .status(201)
-              .json(user)
-          })
-          .catch(next)
     })
 
 usersRouter
