@@ -101,9 +101,7 @@ usersRouter
             bcrypt.hash(req.body.password, 6)
             .then((hashPass) => {
                 const hashedUser = {
-                    password: hashPass,
-                    display_name: userToUpdate.display_name,
-                    username: userToUpdate.username
+                    password: hashPass
                 }
                 console.log(hashedUser, "hashedUser")
                 UsersService.updateUser(
