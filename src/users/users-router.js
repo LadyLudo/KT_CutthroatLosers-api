@@ -97,16 +97,14 @@ usersRouter
                 }
             })
         }
-        console.log(req.body.password, "body password")
         if(req.body.password !== undefined){
-            console.log(req.body.password)
             bcrypt.hash(req.body.password, 6)
             .then((hash) => {
-                console.log(hash)
                 const hashedUser = {
                     password: hash,
                     ...userToUpdate
                 }
+                console.log(hashedUser, "hashedUser")
                 UsersService.updateUser(
                     req.app.get('db'),
                     req.params.user_id,
