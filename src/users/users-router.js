@@ -97,7 +97,8 @@ usersRouter
                 }
             })
         }
-        if(req.body.password){
+        console.log(req.body.password, "body password")
+        if(req.body.password !== undefined){
             console.log(req.body.password)
             bcrypt.hash(req.body.password, 6)
             .then((hash) => {
