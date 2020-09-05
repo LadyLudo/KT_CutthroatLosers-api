@@ -192,7 +192,7 @@ usersRouter
             .catch(next)
     })
     .get((req,res,next) => {
-        if (res.user.password === req.query.password){
+        if (bcrypt.compare(req.query.password, res.user.password)){
             res.json({
             user_id: res.user.user_id,
             password: res.user.password,
