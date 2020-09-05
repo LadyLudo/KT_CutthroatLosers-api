@@ -97,8 +97,9 @@ usersRouter
                 }
             })
         }
-
-            bcrypt.hash(userToUpdate.password, 6)
+        if(req.body.password){
+            console.log(req.body.password)
+            bcrypt.hash(req.body.password, 6)
             .then((hash) => {
                 const hashedUser = {
                     password: hash,
@@ -115,17 +116,17 @@ usersRouter
                     })
                     .catch(next)
             })
-        // } else {
-        //     UsersService.updateUser(
-        //         req.app.get('db'),
-        //         req.params.user_id,
-        //         userToUpdate
-        //     )
-        //         .then(numRowsAffected => {
-        //             res.status(204).end()
-        //         })
-        //         .catch(next)
-        // }
+        } else {
+            UsersService.updateUser(
+                req.app.get('db'),
+                req.params.user_id,
+                userToUpdate
+            )
+                .then(numRowsAffected => {
+                    res.status(204).end()
+                })
+                .catch(next)
+        }
     })
 
 usersRouter
