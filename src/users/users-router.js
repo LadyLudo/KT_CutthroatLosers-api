@@ -98,15 +98,35 @@ usersRouter
             })
         }
 
-        UsersService.updateUser(
-            req.app.get('db'),
-            req.params.user_id,
-            userToUpdate
-        )
-            .then(numRowsAffected => {
-                res.status(204).end()
+        if (userToUpdate.password) {
+            bcrypt.hash(userToUpdate.password, 10)
+            .then((hash) => {
+                const hashedUser = {
+                    password: hash,
+                    ...userToUpdate
+                }
+                UsersService.updateUser(
+                    req.app.get('db'),
+                    req.params.user_id,
+                    hashedUser
+                  )
+                    .then(user => {
+                      res
+                        .status(204).end()
+                    })
+                    .catch(next)
             })
-            .catch(next)
+        } else {
+            UsersService.updateUser(
+                req.app.get('db'),
+                req.params.user_id,
+                userToUpdate
+            )
+                .then(numRowsAffected => {
+                    res.status(204).end()
+                })
+                .catch(next)
+        }
     })
 
 usersRouter
