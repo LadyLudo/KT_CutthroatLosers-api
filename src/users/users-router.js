@@ -98,8 +98,7 @@ usersRouter
             })
         }
 
-
-            bcrypt.hash(userToUpdate.password, 10)
+            bcrypt.hash(userToUpdate.password, 6)
             .then((hash) => {
                 const hashedUser = {
                     password: hash,

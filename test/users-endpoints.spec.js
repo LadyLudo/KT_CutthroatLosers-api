@@ -161,7 +161,7 @@ describe('DELETE /api/users/:user_id', () => {
     })
 })
 
-describe('PATCH /api/users/:user_id', () => {
+describe.only('PATCH /api/users/:user_id', () => {
     context('Given no users', () => {
         it('resonds with 404', () => {
             const user_id = 123456
