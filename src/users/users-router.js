@@ -7,18 +7,13 @@ const jsonParser = express.json();
 
 usersRouter
   .route("/")
-  .get((req, res) => {
-    res.send("Hello from inside the users endpoint!");
+  .get((req, res, next) => {
+    UsersService.getAllUsers(req.app.get("db"))
+      .then((users) => {
+        res.json(users);
+      })
+      .catch(next);
   })
-  // .get((req,res,next) => {
-  //     UsersService.getAllUsers(
-  //         req.app.get('db')
-  //     )
-  //         .then(users => {
-  //             res.json(users)
-  //         })
-  //         .catch(next)
-  // })
   .post(jsonParser, (req, res, next) => {
     const { password, display_name, username } = req.body;
     const newUser = { password, display_name, username };
