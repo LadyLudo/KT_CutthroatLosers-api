@@ -48,7 +48,7 @@ app.use('/api/weighins', WeighinRouter)
 app.use('/api/workouts', WorkoutRouter)
 
 app.get('/', (req,res) => {
-    res.send('Hello, world!')
+    res.send('Hello, cutthroat losers world!')
 })
 
 app.use(function errorHandler(error, req, res, next) {
