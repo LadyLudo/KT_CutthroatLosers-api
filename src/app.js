@@ -35,7 +35,7 @@ const corsOptions = {
   },
   credentials: true,
 };
-// app.use(cors(corsOptions))
+app.use(cors(corsOptions));
 
 app.use("/api/users", usersRouter);
 app.use("/api/contests", contestsRouter);
@@ -47,19 +47,18 @@ app.use("/api/wins", WinRouter);
 app.use("/api/weighins", WeighinRouter);
 app.use("/api/workouts", WorkoutRouter);
 
-//only thing working
 app.get("/", (req, res) => {
   res.send("Hello, cutthroat losers world!");
 });
 
 app.use(function errorHandler(error, req, res, next) {
-  // let response;
-  // if (NODE_ENV === "production") {
-  //   response = { error: { message: "production server error" } };
-  // } else {
-  console.error(error);
-  response = { message: error.message, error };
-  //}
+  let response;
+  if (NODE_ENV === "production") {
+    response = { error: { message: "production server error" } };
+  } else {
+    console.error(error);
+    response = { message: error.message, error };
+  }
   res.status(500).json(response);
 });
 module.exports = app;
