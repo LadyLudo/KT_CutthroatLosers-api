@@ -1,6 +1,6 @@
 const PointsService = {
   getAllPoints(knex) {
-    return knex.select().from("points").orderBy("date_created");
+    return knex.select().from('points').orderBy('date_created');
   },
 
   insertPoints(knex, newPoints) {
